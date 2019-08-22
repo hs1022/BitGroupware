@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title>공지사항 글쓰기(관리자용)</title>
+<!-- include libraries(jQuery, bootstrap) -->
+<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script> 
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script> 
+<!-- include summernote css/js -->
+<link th:href="@{/editor/summernote/summernote.css}" rel="stylesheet">
+<script th:src="@{/editor/summernote/summernote.js}"></script>
+<script>
+$(function(){
+	$("#ntContent").summernote();
+});
+</script>
+<script>
+$(function(){
+	$(".uploadList").on("click","span",function(e){
+		var that=$(this); //클릭한 span 태그
+		$.ajax({
+			url:"/admin/deleteFileAjax",
+			type:"post",
+			data:{
+				fileUrl:$(this).attr("data-src"),
+				ntNo:0
+			},
+			dataType:"text",
+			success:function(result){
+				if(result=="deleted"){
+					that.parent("div").remove();
+				}
+			}
+		});
+	});
+	$(".fileDrop").on("dragenter dragover",function(e){
+		e.preventDefault();
+	});
+	$(".fileDrop").on("drop",function(e){
+		e.preventDefault();
+		var files=e.originalEvent.dataTransfer.files;
+		var file=files[0];
+		var formData=new FormData();
+		formData.append("file",file);
+		$.ajax({
+			url: "/admin/uploadAjax",
+			data: formData,
+			dataType: "text",
+			processData: false,
+			contentType: false,
+			type: "post",
+			success:function(fileUrl){
+				var str="";
+				str="<div><a href='/admin/displayFile?fileUrl="+fileUrl+"'>"+getFileName(fileUrl)+"</a>";
+				str+="<span data-src="+fileUrl+">[삭제]</span></div>";
+				$(".uploadList").append(str);
+			}
+		});
+	});
+});
+function getFileName(fileUrl){
+	var idx=fileUrl.indexOf("_")+1;
+	return fileUrl.substr(idx);
+}
+</script>
+<style>
+.fileDrop {
+	width: 100%;
+	height: 200px;
+	border: 1px dotted gray;
+	background-color: gray;
+}
+</style>
+</head>
+<body th:align="center">
+<form th:action="@{/admin/insertNotice}" method="post">
+<table th:align="center" border="1" th:cellpadding="0" th:cellspacing="0">
+<tr>
+	<td bgcolor="orange" th:text="분류" width="80"></td>
+	<td>
+		<select name="ntCate">
+        	<option value="일반">일반</option>
+        	<option value="개발">개발</option>
+        	<option value="영업">영업</option>
+        </select>
+    </td>
+</tr>
+<tr>
+	<td bgcolor="orange" th:text="제목" width="80"></td>
+	<td><input name="ntTitle" type="text" size="50"></td>
+</tr>
+<tr>
+	<td bgcolor="orange" th:text="작성자"></td>
+	<td><span sec:authentication="principal.member.memName"></span></td>
+</tr>
+<tr>
+	<td bgcolor="orange" th:text="내용"></td>
+	<td><textarea name="ntContent" cols="50" rows="10" id="ntContent"></textarea></td>
+</tr>
+<tr>
+	<td bgcolor="orange" th:text="첨부파일" width="80"></td>
+	<td>
+		<div> 첨부파일을 드래그앤 드롭 하여 등록하세요
+			<div class="fileDrop"></div>
+			<div class="uploadList"></div>
+		</div>
+	</td>
+</tr>	
+<tr>
+	<td colspan="2" align="center">
+		<input type="submit" value="게시글 작성">
+	</td>
+</tr>
+</table>
+</form>
+<a th:href="@{/admin/selectNoticeList}">글목록</a>
+
+</body>
+</html>

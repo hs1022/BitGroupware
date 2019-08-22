@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title>전자결재 문서양식 리스트(관리자)</title>
+</head>
+<body>
+	<table border="1">
+		<tr>
+			<td>1</td>
+			<td>2</td>
+		</tr>
+		<tr th:each="approval:${approvalDocList}">
+
+			<td th:text="${approval.apdocName}"></td>
+			<td th:text="${approval.apdocForm}"></td>
+
+		</tr>
+	</table>
+	<a th:href="@{/admin/insertApprovalDocView}">문서 등록</a>
+</body>
+</html>
