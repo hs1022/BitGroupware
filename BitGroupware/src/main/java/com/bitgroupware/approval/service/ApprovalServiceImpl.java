@@ -2,6 +2,7 @@ package com.bitgroupware.approval.service;
 
 import java.util.List;
 
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,8 @@ import com.bitgroupware.approval.vo.ApprovalDoucemtDto;
 @Service
 public class ApprovalServiceImpl implements ApprovalService {
 
+	@Autowired
+    private SqlSessionTemplate sqlSession;
 	@Autowired
     private ApprovalDocumentDao apDao;
 	
@@ -26,10 +29,14 @@ public class ApprovalServiceImpl implements ApprovalService {
 		return apDao.selectApprovalDoc(apdocNo);
 	}
 	 
+	public ApprovalDoucemtDto selectApprovalDocOne(String param) {
+        return sqlSession.selectOne("selectSignDocTypeOne", param);
+    }
+	
 	// 등록
 	@Override
 	public void insertApprovalDoc(ApprovalDoucemtDto dto) {
-		// TODO Auto-generated method stub
+		apDao.insertApprovalDoc(dto);
 	}
 
 	// 수정

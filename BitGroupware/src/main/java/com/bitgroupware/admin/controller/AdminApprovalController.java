@@ -35,26 +35,24 @@ public class AdminApprovalController {
 		return "admin/approval/approvalDocList";
 	}
 	
-	/*
-	 * // 상세
-	 * 
-	 * @RequestMapping("/selectDoc") public String
-	 * selectApprovalDoc(HttpServletRequest request,ModelMap model,int apdocNo) {
-	 * 
-	 * 
-	 * return "admin/approval/approvalDoc"; }
-	 */
-	
-	// 등록
+	// 등록페이지
 	@RequestMapping("/insertApprovalDocView")
-	public String insertApprovalDoc(HttpServletRequest request,ModelMap model,ApprovalDoucemtDto apdocVo) {
+	public String insertApprovalDocView(HttpServletRequest request,ModelMap model,ApprovalDoucemtDto apdocDto) {
 		
-		if(apdocVo.getApdocNo() != null) {
-			apdocVo = approvalService.selectApprovalDoc(apdocVo.getApdocNo());
-//			model.addAttribute( )
+		if(apdocDto.getApdocNo() != null) {
+			apdocDto = approvalService.selectApprovalDoc(apdocDto.getApdocNo());
+			model.addAttribute("apdocDto",apdocDto);
 		}
 		return "admin/approval/approvalDocWrite";
 	}
+	
+	
+	// 등록
+	public String insertApprovalDoc(HttpServletRequest request,ModelMap model,ApprovalDoucemtDto apdocDto) {
+		approvalService.insertApprovalDoc(apdocDto);
+		return "redirect:/admin/approval/approvalDocList";
+	}
+	
 	
 	// 수정
 	@RequestMapping("/updateApprovalDoc")
