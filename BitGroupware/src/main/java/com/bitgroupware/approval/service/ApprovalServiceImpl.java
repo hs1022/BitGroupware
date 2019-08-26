@@ -2,7 +2,6 @@ package com.bitgroupware.approval.service;
 
 import java.util.List;
 
-import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +13,6 @@ import com.bitgroupware.approval.vo.ApprovalDoucemtDto;
 @Service
 public class ApprovalServiceImpl implements ApprovalService {
 
-	@Autowired
-    private SqlSessionTemplate sqlSession;
-	
 	@Autowired
     private ApprovalDocumentDao apDao;
 	
@@ -33,12 +29,8 @@ public class ApprovalServiceImpl implements ApprovalService {
 	public ApprovalDoucemtDto selectApprovalDoc(String apdocNo) {
 		return apDao.selectApprovalDoc(apdocNo);
 	}
-	 
-	public ApprovalDoucemtDto selectApprovalDocOne(String param) {
-        return sqlSession.selectOne("selectSignDocTypeOne", param);
-    }
-	
-	// 등록
+
+	// 등록(insert+update)
 	@Override
 	public void insertApprovalDoc(ApprovalDoucemtDto dto) {
 		if(dto.getApdocNo() == null || "".equals(dto.getApdocNo())) {
@@ -50,16 +42,11 @@ public class ApprovalServiceImpl implements ApprovalService {
 		}else {
 			LOGGER.error("둘 다 해당사항 없음");
 		}
-		
 	}
-
 
 	// 삭제
 	@Override
 	public void deleteApprovalDoc(ApprovalDoucemtDto dto) {
 		apDao.deleteApprovalDoc(dto);
 	}
-
-	
-	
 }

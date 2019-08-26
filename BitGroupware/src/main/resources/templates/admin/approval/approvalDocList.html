@@ -14,8 +14,6 @@
 		<tr th:each="approval:${approvalDocList}">
 			<td> <a th:href="@{/admin/insertApprovalDocView(apdocNo=${approval.apdocNo})}" th:text="${approval.apdocName}"></a></td>
 			<td th:utext="${approval.apdocForm}"></td>
-			
-
 		</tr>
 	</table>
 	<a th:href="@{/admin/insertApprovalDocView}">문서 등록</a>

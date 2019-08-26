@@ -2,12 +2,9 @@ package com.bitgroupware.admin.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bitgroupware.approval.service.ApprovalService;
@@ -36,11 +33,11 @@ public class AdminApprovalController {
 		return "admin/approval/approvalDocList";
 	}
 	
-	// 등록페이지
+	// 등록페이지(insert+update)
 	@RequestMapping("/insertApprovalDocView")
 	public String insertApprovalDocView(Model model,ApprovalDoucemtDto apdocDto) {
 		
-		if(apdocDto.getApdocNo() != null) { // 수정할 때 필요 해서 가져감
+		if(apdocDto.getApdocNo() != null) { // 수정할 때 필요 해서  Dto 가져감
 			apdocDto = approvalService.selectApprovalDoc(apdocDto.getApdocNo());
 			model.addAttribute("apdocDto",apdocDto);
 		}
@@ -48,7 +45,7 @@ public class AdminApprovalController {
 	}
 	
 	
-	// 등록
+	// 등록(insert+update)
 	@RequestMapping("/insertApprovalDoc")
 	public String insertApprovalDoc(Model model,ApprovalDoucemtDto apdocDto) {
 		approvalService.insertApprovalDoc(apdocDto);
@@ -56,13 +53,6 @@ public class AdminApprovalController {
 	}
 	
 	
-//	// 수정
-//	@RequestMapping("/updateApprovalDoc")
-//	public String updateApprovalDocList(HttpServletRequest request,ModelMap model,ApprovalDoucemtDto apdocDto) {
-//		
-//		return "admin/approval/approvalDocUpdate";
-//	}
-//	
 	// 삭제
 	@RequestMapping("/deleteApprovalDoc")
 	public String deleteApprovalDocList(Model model,ApprovalDoucemtDto apdocDto) {
