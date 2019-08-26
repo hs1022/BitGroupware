@@ -2,6 +2,8 @@ package com.bitgroupware.approval.service;
 
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +33,7 @@ public class ApprovalServiceImpl implements ApprovalService {
 	}
 
 	// 등록(insert+update)
+	@Transactional
 	@Override
 	public void insertApprovalDoc(ApprovalDoucemtDto dto) {
 		if(dto.getApdocNo() == null || "".equals(dto.getApdocNo())) {
