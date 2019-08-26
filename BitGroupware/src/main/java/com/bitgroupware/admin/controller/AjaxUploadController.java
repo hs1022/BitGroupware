@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.bitgroupware.community.service.NoticeService;
-import com.bitgroupware.community.utils.MediaUtils;
-import com.bitgroupware.community.utils.TemporaryFileUrl;
-import com.bitgroupware.community.utils.UploadFileUtils;
 import com.bitgroupware.community.vo.NoticeVo;
+import com.bitgroupware.utils.MediaUtils;
+import com.bitgroupware.utils.TemporaryFileUrl;
+import com.bitgroupware.utils.UploadFileUtils;
 
 @Controller
 @RequestMapping("/admin")

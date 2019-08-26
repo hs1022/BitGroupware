@@ -1,4 +1,4 @@
-package com.bitgroupware.community.utils;
+package com.bitgroupware.utils;
 
 import java.awt.image.BufferedImage;
 import java.io.File;

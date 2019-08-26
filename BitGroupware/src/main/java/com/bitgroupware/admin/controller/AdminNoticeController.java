@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bitgroupware.community.service.NoticeService;
-import com.bitgroupware.community.utils.Pager;
-import com.bitgroupware.community.utils.Search;
-import com.bitgroupware.community.utils.TemporaryFileUrl;
 import com.bitgroupware.community.vo.NoticeFileVo;
 import com.bitgroupware.community.vo.NoticeVo;
 import com.bitgroupware.security.config.SecurityUser;
+import com.bitgroupware.utils.Pager;
+import com.bitgroupware.utils.Search;
+import com.bitgroupware.utils.TemporaryFileUrl;
 
 @Controller
 @RequestMapping("/admin")

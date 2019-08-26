@@ -2,9 +2,9 @@ package com.bitgroupware.community.service;
 
 import java.util.List;
 
-import com.bitgroupware.community.utils.Search;
 import com.bitgroupware.community.vo.NoticeFileVo;
 import com.bitgroupware.community.vo.NoticeVo;
+import com.bitgroupware.utils.Search;
 
 public interface NoticeService {
 

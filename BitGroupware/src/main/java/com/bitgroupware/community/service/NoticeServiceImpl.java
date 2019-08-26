@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 
 import com.bitgroupware.community.persistence.NoticeFileRepository;
 import com.bitgroupware.community.persistence.NoticeRepository;
-import com.bitgroupware.community.utils.Search;
-import com.bitgroupware.community.utils.TemporaryFileUrl;
 import com.bitgroupware.community.vo.NoticeFileVo;
 import com.bitgroupware.community.vo.NoticeVo;
+import com.bitgroupware.utils.Search;
+import com.bitgroupware.utils.TemporaryFileUrl;
 
 @Service
 public class NoticeServiceImpl implements NoticeService {
