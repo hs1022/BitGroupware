@@ -16,6 +16,9 @@ public interface ApprovalService {
 	void insertApprovalDoc(ApprovalDoucemtDto dto);
 	
 	// 수정
-	void updateApprovalDoc(ApprovalDoucemtDto dto);
+//	void updateApprovalDoc(ApprovalDoucemtDto dto);
+	
+	// 삭제
+	void deleteApprovalDoc(ApprovalDoucemtDto dto);
 
 }

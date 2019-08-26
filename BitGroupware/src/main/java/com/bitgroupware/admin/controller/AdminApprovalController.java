@@ -6,12 +6,12 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.bitgroupware.approval.service.ApprovalService;
 import com.bitgroupware.approval.vo.ApprovalDoucemtDto;
-import com.bitgroupware.community.service.NoticeService;
 
 /**
  * @Title	ApprovalController
@@ -20,6 +20,7 @@ import com.bitgroupware.community.service.NoticeService;
  */
 
 @Controller
+@RequestMapping("/admin")
 public class AdminApprovalController {
 	
 	@Autowired
@@ -27,7 +28,7 @@ public class AdminApprovalController {
 	
 	// 문서리스트
 	@RequestMapping("/selectApprovalDocList")
-	public String selectApprovalDocList(HttpServletRequest request,ModelMap model) {
+	public String selectApprovalDocList(Model model) {
 		
 		List<ApprovalDoucemtDto> approvalDocList = approvalService.selectApprovalDocList();
 		model.addAttribute("approvalDocList",approvalDocList);
@@ -37,9 +38,9 @@ public class AdminApprovalController {
 	
 	// 등록페이지
 	@RequestMapping("/insertApprovalDocView")
-	public String insertApprovalDocView(HttpServletRequest request,ModelMap model,ApprovalDoucemtDto apdocDto) {
+	public String insertApprovalDocView(Model model,ApprovalDoucemtDto apdocDto) {
 		
-		if(apdocDto.getApdocNo() != null) {
+		if(apdocDto.getApdocNo() != null) { // 수정할 때 필요 해서 가져감
 			apdocDto = approvalService.selectApprovalDoc(apdocDto.getApdocNo());
 			model.addAttribute("apdocDto",apdocDto);
 		}
@@ -48,23 +49,24 @@ public class AdminApprovalController {
 	
 	
 	// 등록
-	public String insertApprovalDoc(HttpServletRequest request,ModelMap model,ApprovalDoucemtDto apdocDto) {
+	@RequestMapping("/insertApprovalDoc")
+	public String insertApprovalDoc(Model model,ApprovalDoucemtDto apdocDto) {
 		approvalService.insertApprovalDoc(apdocDto);
-		return "redirect:/admin/approval/approvalDocList";
+		return "redirect:/admin/selectApprovalDocList";
 	}
 	
 	
-	// 수정
-	@RequestMapping("/updateApprovalDoc")
-	public String updateApprovalDocList(HttpServletRequest request,ModelMap model,ApprovalDoucemtDto apdocVo) {
-		
-		return "admin/approval/approvalDocUpdate";
-	}
-	
+//	// 수정
+//	@RequestMapping("/updateApprovalDoc")
+//	public String updateApprovalDocList(HttpServletRequest request,ModelMap model,ApprovalDoucemtDto apdocDto) {
+//		
+//		return "admin/approval/approvalDocUpdate";
+//	}
+//	
 	// 삭제
 	@RequestMapping("/deleteApprovalDoc")
-	public String deleteApprovalDocList(HttpServletRequest request,ModelMap model,ApprovalDoucemtDto apdocVo) {
-		
-		return "admin/approval/approvalDocDelete";
+	public String deleteApprovalDocList(Model model,ApprovalDoucemtDto apdocDto) {
+		approvalService.deleteApprovalDoc(apdocDto);
+		return "redirect:/admin/selectApprovalDocList";
 	}
 }

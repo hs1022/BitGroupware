@@ -3,6 +3,8 @@ package com.bitgroupware.approval.service;
 import java.util.List;
 
 import org.mybatis.spring.SqlSessionTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,8 +16,11 @@ public class ApprovalServiceImpl implements ApprovalService {
 
 	@Autowired
     private SqlSessionTemplate sqlSession;
+	
 	@Autowired
     private ApprovalDocumentDao apDao;
+	
+	static final Logger LOGGER = LoggerFactory.getLogger(ApprovalServiceImpl.class);
 	
 	// 모든 문서양식 불러오기
 	@Override
@@ -36,14 +41,23 @@ public class ApprovalServiceImpl implements ApprovalService {
 	// 등록
 	@Override
 	public void insertApprovalDoc(ApprovalDoucemtDto dto) {
-		apDao.insertApprovalDoc(dto);
+		if(dto.getApdocNo() == null || "".equals(dto.getApdocNo())) {
+			apDao.insertApprovalDoc(dto);
+			LOGGER.error("insertApprovalDoc");
+		}else if(dto.getApdocNo() != null){
+			apDao.updateApprovalDoc(dto);
+			LOGGER.error("updateApprovalDoc");
+		}else {
+			LOGGER.error("둘 다 해당사항 없음");
+		}
+		
 	}
 
-	// 수정
+
+	// 삭제
 	@Override
-	public void updateApprovalDoc(ApprovalDoucemtDto dto) {
-		// TODO Auto-generated method stub
-		
+	public void deleteApprovalDoc(ApprovalDoucemtDto dto) {
+		apDao.deleteApprovalDoc(dto);
 	}
 
 	

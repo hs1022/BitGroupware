@@ -16,18 +16,33 @@ $(function(){
 	$("#apdocForm").summernote();
 });
 </script>
+
 </head>
-<body>
-	<table border="1">
-		<tr>
-			<td>이름</td>
-			<td><input type="text" name="apdocName" id="apdocName"></td>
-		</tr>
-		<tr>
-			<td><textarea name="apdocForm" cols="50" rows="10" id="apdocForm"></textarea></td>
-		</tr>
-	</table>
-	<a th:href="@{/admin/selectDocList}">목록</a>
-	<input type="submit" value="저장">
+<body th:align="center">
+	<form th:action="@{/admin/insertApprovalDoc}" method="post">
+		<input type="hidden" name="apdocNo" th:value="${apdocDto?.apdocNo}">
+
+		
+		<table th:align="center" border="1" th:cellpadding="0" th:cellspacing="0">
+			<tr>
+				<td th:text="문서명" width="80"></td>
+				<td><input name="apdocName" type="text" size="50" th:value="${apdocDto?.apdocName}"></td>
+			</tr>
+
+			<tr>
+				<td th:text="내용"></td>
+				<td><textarea name="apdocForm" cols="50" rows="10" id="apdocForm" th:utext="${apdocDto?.apdocForm}"></textarea></td>
+			</tr>
+			
+			<tr>
+				<td colspan="2" align="center">
+				<input type="submit" value="저장">
+				</td>
+			</tr>
+		</table>
+	</form>
+	<a th:href="@{/admin/selectApprovalDocList}">목록</a>
+	<a th:if="${apdocDto?.apdocNo != null}" th:href="@{/admin/deleteApprovalDoc(apdocNo=${apdocDto.apdocNo})}">삭제</a>
+
 </body>
 </html>

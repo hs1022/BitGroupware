@@ -8,13 +8,13 @@
 <body>
 	<table border="1">
 		<tr>
-			<td>1</td>
-			<td>2</td>
+			<td>문서명</td>
+			<td>문서내용</td>
 		</tr>
 		<tr th:each="approval:${approvalDocList}">
-
-			<td th:text="${approval.apdocName}"></td>
-			<td th:text="${approval.apdocForm}"></td>
+			<td> <a th:href="@{/admin/insertApprovalDocView(apdocNo=${approval.apdocNo})}" th:text="${approval.apdocName}"></a></td>
+			<td th:utext="${approval.apdocForm}"></td>
+			
 
 		</tr>
 	</table>

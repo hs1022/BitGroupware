@@ -2,6 +2,7 @@ package com.bitgroupware.approval.persistence;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -25,7 +26,11 @@ public interface ApprovalDocumentDao {
 	void insertApprovalDoc(ApprovalDoucemtDto dto);
 
 	// 수정
-	@Update("")
+	@Update("UPDATE APPROVAL_DOCUMENT SET APDOC_NAME=#{apdocName}, APDOC_FORM=#{apdocForm} WHERE APDOC_NO=#{apdocNo}")
 	void updateApprovalDoc(ApprovalDoucemtDto dto);
+	
+	// 삭제
+	@Delete("DELETE from APPROVAL_DOCUMENT WHERE APDOC_NO = #{apdocNo}")
+	void deleteApprovalDoc(ApprovalDoucemtDto dto);
 
 }
