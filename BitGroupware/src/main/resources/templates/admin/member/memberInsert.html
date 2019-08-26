@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>사원 등록 (관리자)</title>
+</head>
+<body th:align="center">
+	<h1>사원 등록</h1>
+	<form th:action="insertMember" method="post">
+	<table th:align="center" border="1" th:cellpadding="0" th:cellspacing="0">
+		<tr>
+			<td th:text="이름"></td>
+			<td><input name="memName" type="text"></td>
+		</tr>
+		<tr>
+			<td th:text="부서"></td>
+			<td>
+				<select name="deptName">
+					<option>--부서 선택--</option>
+				</select>
+				<select name="teamName">
+					<option>--팀 선택--</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td th:text="직급"></td>
+			<td>
+				<select name="ranks">
+					<option>--직급 선택--</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td th:text="입사일"></td>
+			<td><input name="memJoinDate" type="date"></td>
+		</tr>
+		<tr>
+			<td th:text="사내전화번호"></td>
+			<td><input name="memOfficeTel" type="text"></td>
+		</tr>
+		<tr>
+			<td th:text="휴대전화번호"></td>
+			<td><input name="memTel" type="text"></td>
+		</tr>
+		<tr>
+			<td th:text="주소"></td>
+			<td>
+				<input name="memAddrCode" type="text"><input type="button" value="주소검색"><br>
+				<input name="memAddr" type="text"><br>
+				<input name="memAddrDetail" type="text">
+			</td>
+		</tr>
+		<tr>
+			<td th:text="서명"></td>
+			<td>
+				<img alt="" src=""><input type="button" value="서명이미지 첨부">
+			</td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<input type="button" value="취소(동작X)">
+				<input type="submit" value="등록">
+			</td>
+		</tr>
+	</table>
+	</form>
+</body>
+</html>
