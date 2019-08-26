@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.bitgroupware.community.service.NoticeService;
-import com.bitgroupware.community.vo.NoticeFileVo;
 import com.bitgroupware.community.vo.NoticeVo;
 import com.bitgroupware.security.config.SecurityUser;
 import com.bitgroupware.utils.Pager;
@@ -77,9 +76,7 @@ public class AdminNoticeController {
 	public String updateNoticeView(Model model, int ntNo) {
 		TemporaryFileUrl.fileUrl.clear();
 		NoticeVo notice = noticeService.selectNoticeByNtNo(ntNo);
-		List<NoticeFileVo> noticeFileList = noticeService.selectNoticeFileListByNtNo(ntNo);
 		model.addAttribute("notice", notice);
-		model.addAttribute("noticeFileList", noticeFileList);
 		return "admin/community/noticeUpdate";
 	}
 	

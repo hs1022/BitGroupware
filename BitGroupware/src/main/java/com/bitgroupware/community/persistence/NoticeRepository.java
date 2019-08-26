@@ -10,11 +10,6 @@ import com.bitgroupware.community.vo.NoticeVo;
 
 public interface NoticeRepository extends JpaRepository<NoticeVo, Integer>, QuerydslPredicateExecutor<NoticeVo>{
 
-	List<NoticeVo> findByNtDelCheckOrderByNtNoDesc(String ntDelCheck);
-
-	@Query(value = "select max(nt_no) from notice", nativeQuery = true)
-	int findByMaxNtNo();
-
 	@Query(value = "select r1.* from (select * from notice where nt_del_check = 'N' and nt_cate like ?2 order by nt_no desc) r1 limit 10 offset ?1", nativeQuery = true)
 	List<NoticeVo> findAllByPagingAndNtCate(int begin, String searchKeyword);
 	@Query(value = "select r1.* from (select * from notice where nt_del_check = 'N' and nt_title like ?2 order by nt_no desc) r1 limit 10 offset ?1", nativeQuery = true)
@@ -29,4 +24,6 @@ public interface NoticeRepository extends JpaRepository<NoticeVo, Integer>, Quer
 	@Query(value = "select count(*) from notice where nt_del_check = 'N' and nt_content like ?", nativeQuery = true)
 	int countByNtContent(String searchKeyword);
 	
+	@Query(value = "select max(nt_no) from notice", nativeQuery = true)
+	int findByMaxNtNo();
 }
