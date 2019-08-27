@@ -15,4 +15,6 @@ public class ApprovalDoucemtDto {
 	private String 	apdocNo,	// 번호
 					apdocName,	// 문서양식명
 					apdocForm;	// 문서양식내용
+	
+	
 }

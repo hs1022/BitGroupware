@@ -13,12 +13,12 @@ import com.bitgroupware.approval.persistence.ApprovalDocumentDao;
 import com.bitgroupware.approval.vo.ApprovalDoucemtDto;
 
 @Service
-public class ApprovalServiceImpl implements ApprovalService {
+public class ApprovalDocServiceImpl implements ApprovalDocService {
 
 	@Autowired
     private ApprovalDocumentDao apDao;
 	
-	static final Logger LOGGER = LoggerFactory.getLogger(ApprovalServiceImpl.class);
+	static final Logger LOGGER = LoggerFactory.getLogger(ApprovalDocServiceImpl.class);
 	
 	// 모든 문서양식 불러오기
 	@Override

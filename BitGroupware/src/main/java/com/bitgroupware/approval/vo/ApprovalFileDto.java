@@ -17,5 +17,5 @@ public class ApprovalFileDto {
 	private String	apFileUrl;		// 첨부파일URL
 	private String	apFileType;		// 파일 타입
 	
-	private MultipartFile[] files;	// 업로드 파일들
+	private MultipartFile file;	// 업로드 파일들
 }

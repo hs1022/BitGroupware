@@ -1,22 +1,14 @@
 package com.bitgroupware.admin.controller;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.bitgroupware.approval.service.ApprovalService;
+import com.bitgroupware.approval.service.ApprovalDocService;
 import com.bitgroupware.approval.vo.ApprovalDoucemtDto;
 import com.bitgroupware.approval.vo.ApprovalFileDto;
 
@@ -31,17 +23,15 @@ import com.bitgroupware.approval.vo.ApprovalFileDto;
 public class AdminApprovalController {
 	
 	@Autowired
-	private ApprovalService approvalService;
+	private ApprovalDocService approvalService;
 	
-	private static String UPLOAD_DIR = System.getProperty("user.dir") + "/test";
+	private static String UPLOAD_DIR = System.getProperty("user.dir") + "/src/main/resources/static/images/";
 	
 	// 문서리스트
 	@RequestMapping("/selectApprovalDocList")
 	public String selectApprovalDocList(Model model) {
-		
 		List<ApprovalDoucemtDto> approvalDocList = approvalService.selectApprovalDocList();
 		model.addAttribute("approvalDocList",approvalDocList);
-		
 		return "admin/approval/approvalDocList";
 	}
 	
@@ -58,10 +48,8 @@ public class AdminApprovalController {
 	
 	// 등록(insert+update)
 	@RequestMapping("/insertApprovalDoc")
-	public String insertApprovalDoc(Model model,
-			ApprovalDoucemtDto apdocDto, @ModelAttribute ApprovalFileDto approvalFileDto) throws IOException {
-	
-
+	public String insertApprovalDoc(Model model, ApprovalDoucemtDto apdocDto,ApprovalFileDto apfileDto) {
+		
 		
 //		if (!file.getOriginalFilename().isEmpty()) {
 //			String fileName = apdocFileDto.getFile().getOriginalFilename();
@@ -69,15 +57,22 @@ public class AdminApprovalController {
 //			apdocFileDto.getFile().transferTo(new File(path+fileName));
 //			apdocFileDto.setApFileUrl(fileName);
 //		}
+		String apFileName = "Empty";
+		
+		if (!apfileDto.getFile().isEmpty()) {
+			apFileName = apfileDto.getFile().getOriginalFilename();
+			try {
+				String path = UPLOAD_DIR;
+				System.out.println("path"+path);
+				apfileDto.getFile().transferTo(new File(path + apFileName));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		apfileDto.setApFileUrl(apFileName);
 		approvalService.insertApprovalDoc(apdocDto);
-		
-		
-		
 		return "redirect:/admin/selectApprovalDocList";
 	}
-	
-
-	
 	
 	// 삭제
 	@RequestMapping("/deleteApprovalDoc")

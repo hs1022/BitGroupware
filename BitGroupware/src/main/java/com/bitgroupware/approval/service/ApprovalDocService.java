@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.bitgroupware.approval.vo.ApprovalDoucemtDto;
 
-public interface ApprovalService {
+public interface ApprovalDocService {
 	
 	// 모든 문서양식 불러오기
 	List<ApprovalDoucemtDto> selectApprovalDocList();

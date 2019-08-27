@@ -21,8 +21,8 @@ $(function(){
 
 </head>
 <body th:align="center">
-<!-- 	<form th:action="@{/admin/insertApprovalDoc}" method="post" enctype="multipart/form-data"> -->
-	<form  method="post" enctype="multipart/form-data">
+	<form th:action="@{/admin/insertApprovalDoc}" method="post" enctype="multipart/form-data">
+<!-- 	<form method="post" enctype="multipart/form-data"> -->
 		<input type="hidden" name="apdocNo" th:value="${apdocDto?.apdocNo}">
 
 		
@@ -39,8 +39,9 @@ $(function(){
 		
 			<tr>
 				<td>파일</td>
-				<td> <input type="file" name="file" id="files"><br>
-				<input type="file" name="file" id="files"></td>
+				<td> 
+				<input type="file" name="file" id="file"><br>
+				</td>
 				 
 			</tr>
 
@@ -67,11 +68,17 @@ $(function(){
 		<a th:if="${apdocDto?.apdocNo != null}" th:href="@{/admin/deleteApprovalDoc(apdocNo=${apdocDto.apdocNo})}">게시글삭제</a>
 		
 	</form>
-
-	<h2>Upload Results:</h2>
-	<div style="border: 1px solid #ccc; padding: 5px;">
-		<span id="result"></span>
-	</div>
+	
+<!-- 	<h3>Uploaded Files:</h3> -->
+       
+<!--       <ul th:each="file : ${uploadedFiles}"> -->
+<!--          <li th:utext="${file}"></li>   -->
+<!--       </ul>  -->
+	
+<!-- 	<h3>Failed:</h3> -->
+<!--       <ul th:each="file : ${failedFiles}"> -->
+<!--          <li style="color:red;" th:utext="${file}"></li>   -->
+<!--       </ul> -->
 
 
 	<!-- 	<script type="text/javascript">
