@@ -6,23 +6,23 @@ import org.springframework.stereotype.Controller;
 public class ApprovalController {
 	
 	// 결재 받을 문서 리스트
-	public String ApprovalListTobe() {
+	public String selectApprovalListTobe() {
 		return null;
 		
 	}
 	
 	// 결재 할 문서 리스트
-	public String ApprovalListTo() {
+	public String selectApprovalListTo() {
 		return null;
 	}
 	
-	// 기안하기
-	public String insertApprovalDocView() {
+	// 기안View
+	public String insertApprovalView() {
 		return null;
 	}
 	
-	// 저장
-	public String insertApprovalDoc() {
+	// 기안
+	public String insertApproval() {
 		return null;
 	}
 	
