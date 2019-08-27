@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title>결재 받은 문서</title>
+</head>
+<body>
+
+
+<form id="form1" name="form1" method="post">
+	<div>
+		<label><input name="searchExt1" id="searchExt1" type="radio" value="" onclick="fn_formSubmit()" th:if="${}"></label>
+	</div>
+
+</form>
+
+<a th:if="${apdocDto?.apdocNo != null}" 
+	th:href="@{/admin/deleteApprovalDoc(apdocNo=${apdocDto.apdocNo})}">게시글삭제</a>
+
+</body>
+</html>

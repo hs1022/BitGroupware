@@ -12,11 +12,6 @@ import com.bitgroupware.approval.service.ApprovalDocService;
 import com.bitgroupware.approval.vo.ApprovalDoucemtDto;
 import com.bitgroupware.approval.vo.ApprovalFileDto;
 
-/**
- * @Title	ApprovalController
- * @Author 	홍한솔
- * @Date	2019. 8. 20.
- */
 
 @Controller
 @RequestMapping("/admin")

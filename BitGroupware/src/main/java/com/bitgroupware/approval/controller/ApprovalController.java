@@ -1,13 +1,25 @@
 package com.bitgroupware.approval.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+
+import com.bitgroupware.approval.service.ApprovalService;
 
 @Controller
 public class ApprovalController {
 	
+	@Autowired
+	private ApprovalService approvalService;
+	
 	// 결재 받을 문서 리스트
-	public String selectApprovalListTobe() {
-		return null;
+	public String selectApprovalListTobe(Model model) {
+		
+		List<?> approvalListTobe = approvalService.selectApprovalListTobe();
+		model.addAttribute("approvalListTobe",approvalListTobe);
+		return "approval/approvalTobeList";
 		
 	}
 	

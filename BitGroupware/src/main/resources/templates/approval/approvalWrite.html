@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title>전자결재 문서양식 작성(관리자)</title>
+<!-- include libraries(jQuery, bootstrap) -->
+<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script> 
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script> 
+<!-- include summernote css/js -->
+<link th:href="@{/editor/summernote/summernote.css}" rel="stylesheet">
+<script th:src="@{/editor/summernote/summernote.js}"></script>
+<script>
+$(function(){
+	$("#apdocForm").summernote();
+});
+
+
+</script>
+
+</head>
+<body th:align="center">
+	<form th:action="@{/admin/insertApprovalDoc}" method="post" enctype="multipart/form-data">
+		<input type="hidden" name="apdocNo" th:value="${apdocDto?.apdocNo}">
+
+		
+		<table th:align="center" border="1" th:cellpadding="0" th:cellspacing="0">
+			<tr>
+				<td th:text="문서명" width="80"></td>
+				<td><input name="apdocName" type="text" size="50" th:value="${apdocDto?.apdocName}"></td>
+			</tr>
+
+			<tr>
+				<td th:text="내용"></td>
+				<td><textarea name="apdocForm" cols="50" rows="10" id="apdocForm" th:utext="${apdocDto?.apdocForm}"></textarea></td>
+			</tr>
+		
+			<tr>
+				<td>파일</td>
+				<td> 
+				<input type="file" name="file" id="file"><br>
+				</td>
+				 
+			</tr>
+
+			<tr>
+				<td colspan="2" align="center">
+				<input type="submit" value="저장" id="submitButton">
+				</td>
+			</tr>
+		</table>
+		<br/><br/>
+		<a th:href="@{/admin/selectApprovalDocList}">목록</a>
+		<a th:if="${apdocDto?.apdocNo != null}" th:href="@{/admin/deleteApprovalDoc(apdocNo=${apdocDto.apdocNo})}">게시글삭제</a>
+		
+	</form>
+
+
+</body>
+</html>
