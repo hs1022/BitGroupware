@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
 import com.bitgroupware.approval.vo.ApprovalDoucemtDto;
+import com.bitgroupware.approval.vo.ApprovalFileDto;
 
 @Mapper
 public interface ApprovalDocumentDao {
@@ -24,10 +25,16 @@ public interface ApprovalDocumentDao {
 	// 등록
 	@Insert("INSERT INTO APPROVAL_DOCUMENT (APDOC_NAME,APDOC_FORM) VALUES (#{apdocName}, #{apdocForm})")
 	void insertApprovalDoc(ApprovalDoucemtDto dto);
+	
+	@Insert("INSERT INTO APPROVAL_FILE () VALUES ()")
+	void insertApprovalDocFile(ApprovalFileDto fileDto);
 
 	// 수정
 	@Update("UPDATE APPROVAL_DOCUMENT SET APDOC_NAME=#{apdocName}, APDOC_FORM=#{apdocForm} WHERE APDOC_NO=#{apdocNo}")
 	void updateApprovalDoc(ApprovalDoucemtDto dto);
+	
+	@Update("INSERT INTO APPROVAL_FILE () VALUES ()")
+	void updateApprovalDocFile(ApprovalFileDto fileDto);
 	
 	// 삭제
 	@Delete("DELETE from APPROVAL_DOCUMENT WHERE APDOC_NO = #{apdocNo}")
