@@ -3,6 +3,7 @@ package com.bitgroupware.approval.service;
 import java.util.List;
 
 import com.bitgroupware.approval.vo.ApprovalDoucemtDto;
+import com.bitgroupware.approval.vo.ApprovalFileDto;
 
 public interface ApprovalDocService {
 	
@@ -15,7 +16,16 @@ public interface ApprovalDocService {
 	// 등록(insert+update)
 	void insertApprovalDoc(ApprovalDoucemtDto dto);
 	
+	void insertApprovalDocFile(ApprovalFileDto fileDto);
+	
+	// 수정
+	void updateApprovalDoc(ApprovalDoucemtDto dto);
+	
+	void updateApprovalDocFile(ApprovalFileDto fileDto);
+	
 	// 삭제
 	void deleteApprovalDoc(ApprovalDoucemtDto dto);
+	
+	void deleteApprovalDocFile(ApprovalFileDto fileDto);
 
 }

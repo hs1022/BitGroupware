@@ -1,16 +1,22 @@
 package com.bitgroupware.admin.controller;
 
 import java.io.File;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.bitgroupware.approval.persistence.ApprovalDao;
+import com.bitgroupware.approval.persistence.ApprovalDocumentDao;
 import com.bitgroupware.approval.service.ApprovalDocService;
 import com.bitgroupware.approval.vo.ApprovalDoucemtDto;
 import com.bitgroupware.approval.vo.ApprovalFileDto;
+import com.bitgroupware.utils.TemporaryFileUrl;
 
 
 @Controller
@@ -19,6 +25,9 @@ public class AdminApprovalController {
 	
 	@Autowired
 	private ApprovalDocService approvalService;
+	
+	@Autowired
+	private ApprovalDocumentDao approvalDocumentDao;
 	
 	private static String UPLOAD_DIR = System.getProperty("user.dir") + "/src/main/resources/static/images/";
 	
@@ -43,29 +52,30 @@ public class AdminApprovalController {
 	
 	// 등록(insert+update)
 	@RequestMapping("/insertApprovalDoc")
-	public String insertApprovalDoc(Model model, ApprovalDoucemtDto apdocDto,ApprovalFileDto apfileDto) {
-		
-		
-//		if (!file.getOriginalFilename().isEmpty()) {
-//			String fileName = apdocFileDto.getFile().getOriginalFilename();
-//			String path = request.getServletContext().getRealPath("upload");
-//			apdocFileDto.getFile().transferTo(new File(path+fileName));
-//			apdocFileDto.setApFileUrl(fileName);
-//		}
-		String apFileName = "Empty";
+	public String insertApprovalDoc(Model model, ApprovalDoucemtDto apdocDto, ApprovalFileDto apfileDto) {
+		String apFilename = "Empty";
+		String path = UPLOAD_DIR;
 		
 		if (!apfileDto.getFile().isEmpty()) {
-			apFileName = apfileDto.getFile().getOriginalFilename();
+			apFilename = apfileDto.getFile().getOriginalFilename();
 			try {
-				String path = UPLOAD_DIR;
+				
 				System.out.println("path"+path);
-				apfileDto.getFile().transferTo(new File(path + apFileName));
+				apfileDto.getFile().transferTo(new File(path + apFilename));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-		apfileDto.setApFileUrl(apFileName);
+		apfileDto.setApFileurl(path+apFilename);
+		apfileDto.setApFilename(apFilename);
+		
 		approvalService.insertApprovalDoc(apdocDto);
+		
+		String apdocNo = approvalDocumentDao.selectMaxApNo();
+		apfileDto.setApdocNo(apdocNo);
+		
+		approvalService.insertApprovalDocFile(apfileDto);
+		
 		return "redirect:/admin/selectApprovalDocList";
 	}
 	

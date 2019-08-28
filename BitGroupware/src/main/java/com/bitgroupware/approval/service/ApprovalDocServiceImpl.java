@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.bitgroupware.approval.persistence.ApprovalDocumentDao;
 import com.bitgroupware.approval.vo.ApprovalDoucemtDto;
+import com.bitgroupware.approval.vo.ApprovalFileDto;
 
 @Service
 public class ApprovalDocServiceImpl implements ApprovalDocService {
@@ -51,5 +52,31 @@ public class ApprovalDocServiceImpl implements ApprovalDocService {
 	@Override
 	public void deleteApprovalDoc(ApprovalDoucemtDto dto) {
 		apDao.deleteApprovalDoc(dto);
+	}
+
+	@Override
+	public void insertApprovalDocFile(ApprovalFileDto fileDto) {
+		// TODO Auto-generated method stub
+		apDao.insertApprovalDocFile(fileDto);
+	}
+
+	@Override
+	public void updateApprovalDoc(ApprovalDoucemtDto dto) {
+		// TODO Auto-generated method stub
+		apDao.updateApprovalDoc(dto);
+		
+	}
+
+	@Override
+	public void updateApprovalDocFile(ApprovalFileDto fileDto) {
+		// TODO Auto-generated method stub
+		apDao.updateApprovalDocFile(fileDto);
+	}
+
+	@Override
+	public void deleteApprovalDocFile(ApprovalFileDto fileDto) {
+		// TODO Auto-generated method stub
+		apDao.deleteApprovalDocFile(fileDto);
+		
 	}
 }

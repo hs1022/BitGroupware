@@ -16,6 +16,17 @@ $(function(){
 	$("#apdocForm").summernote();
 });
 
+// // 파일 확장자 체크
+// if( $("#file").val() != "" ){
+//     var ext = $('#docufile').val().split('.').pop().toLowerCase();
+//   if($.inArray(ext, ['gif','png','jpg','jpeg','doc','docx','xls','xlsx','hwp']) == -1) {
+//      alert('등록 할수 없는 파일명입니다.');
+//      $("#file").val(""); // input file 파일명을 다시 지워준다.
+//      return;
+//  }
+// }
+// });
+
 
 </script>
 
@@ -42,7 +53,17 @@ $(function(){
 				<td> 
 				<input type="file" name="file" id="file"><br>
 				</td>
-				 
+			</tr>
+			
+			<tr>
+				<td>최종 결재자</td>
+<!-- 				<label><input type="radio" name="finalSign" id="finalSign" value="1" th:attr="checkd=${apdocDto?.getFilnalSign().toString() == '1' ? 'true' : 'false'}">예</label> -->
+				<td>
+				<label>팀장<input type="radio" name="finalSign" id="finalSign" value="2" /></label>
+				<label>부장<input type="radio" name="finalSign" id="finalSign" value="3" /></label>
+				<label>이사<input type="radio" name="finalSign" id="finalSign" value="4" /></label>
+				<label>대표<input type="radio" name="finalSign" id="finalSign" value="5" /></label>		
+				</td>
 			</tr>
 
 			<tr>
@@ -51,8 +72,10 @@ $(function(){
 				</td>
 			</tr>
 		</table>
-		
-<!-- 		<div id="fileDiv"> -->
+
+
+
+		<!-- 		<div id="fileDiv"> -->
 <!-- 			<p> -->
 <!-- 				<input type="file" id="file" name="file_0"> -->
 <!-- 				<a href="#this" id="delete" name="delete">삭제</a> -->
