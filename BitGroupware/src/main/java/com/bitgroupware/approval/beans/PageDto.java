@@ -1,6 +1,13 @@
 package com.bitgroupware.approval.beans;
 
-public class PageVO {
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
+@Getter
+@Setter
+@ToString
+public class PageDto {
     private Integer displayRowCount = 10;           // 출력할 데이터 개수
     private Integer rowStart;                       // 시작행번호
     private Integer rowEnd;                         // 종료행 번호
@@ -42,66 +49,6 @@ public class PageVO {
         }
         
         return page;
-    }
-
-    public void setPage(Integer page) {
-        this.page = page;
-    }
-
-    public Integer getRowStart() {
-        return rowStart;
-    }
-
-    public void setRowStart(Integer rowStart) {
-        this.rowStart = rowStart;
-    }
-
-    public Integer getRowEnd() {
-        return rowEnd;
-    }
-
-    public void setRowEnd(Integer rowEnd) {
-        this.rowEnd = rowEnd;
-    }
-
-    public Integer getDisplayRowCount() {
-        return displayRowCount;
-    }
-
-    public void setDisplayRowCount(Integer displayRowCount) {
-        this.displayRowCount = displayRowCount;
-    }
-
-    public Integer getTotPage() {
-        return totPage;
-    }
-
-    public void setTotPage(Integer totPage) {
-        this.totPage = totPage;
-    }
-
-    public Integer getTotRow() {
-        return totRow;
-    }
-
-    public void setTotRow(Integer totRow) {
-        this.totRow = totRow;
-    }
-
-    public Integer getPageStart() {
-        return pageStart;
-    }
-
-    public void setPageStart(Integer pageStart) {
-        this.pageStart = pageStart;
-    }
-
-    public Integer getPageEnd() {
-        return pageEnd;
-    }
-
-    public void setPageEnd(Integer pageEnd) {
-        this.pageEnd = pageEnd;
     }
 
 
