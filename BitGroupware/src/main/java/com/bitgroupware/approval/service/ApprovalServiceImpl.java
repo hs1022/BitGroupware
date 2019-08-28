@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.bitgroupware.approval.vo.ApprovalDto;
+import com.bitgroupware.approval.beans.ApprovalDto;
 
 @Service
 public class ApprovalServiceImpl implements ApprovalService {

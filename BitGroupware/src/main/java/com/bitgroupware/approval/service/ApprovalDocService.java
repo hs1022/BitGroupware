@@ -2,8 +2,8 @@ package com.bitgroupware.approval.service;
 
 import java.util.List;
 
-import com.bitgroupware.approval.vo.ApprovalDoucemtDto;
-import com.bitgroupware.approval.vo.ApprovalFileDto;
+import com.bitgroupware.approval.beans.ApprovalDoucemtDto;
+import com.bitgroupware.approval.beans.ApprovalFileDto;
 
 public interface ApprovalDocService {
 	

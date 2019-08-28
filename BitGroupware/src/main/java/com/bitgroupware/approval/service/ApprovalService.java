@@ -2,7 +2,7 @@ package com.bitgroupware.approval.service;
 
 import java.util.List;
 
-import com.bitgroupware.approval.vo.ApprovalDto;
+import com.bitgroupware.approval.beans.ApprovalDto;
 
 public interface ApprovalService {
 	

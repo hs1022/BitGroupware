@@ -8,8 +8,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 
-import com.bitgroupware.approval.vo.ApprovalDoucemtDto;
-import com.bitgroupware.approval.vo.ApprovalFileDto;
+import com.bitgroupware.approval.beans.ApprovalDoucemtDto;
+import com.bitgroupware.approval.beans.ApprovalFileDto;
 
 @Mapper
 public interface ApprovalDocumentDao {

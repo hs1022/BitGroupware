@@ -1,4 +1,4 @@
-package com.bitgroupware.approval.vo;
+package com.bitgroupware.approval.beans;
 
 import lombok.Getter;
 import lombok.ToString;

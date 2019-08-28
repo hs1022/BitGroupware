@@ -9,9 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bitgroupware.approval.beans.ApprovalDoucemtDto;
+import com.bitgroupware.approval.beans.ApprovalFileDto;
 import com.bitgroupware.approval.persistence.ApprovalDocumentDao;
-import com.bitgroupware.approval.vo.ApprovalDoucemtDto;
-import com.bitgroupware.approval.vo.ApprovalFileDto;
 
 @Service
 public class ApprovalDocServiceImpl implements ApprovalDocService {

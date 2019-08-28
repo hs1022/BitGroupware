@@ -2,7 +2,7 @@ package com.bitgroupware.approval.persistence;
 
 import java.util.List;
 
-import com.bitgroupware.approval.vo.ApprovalDto;
+import com.bitgroupware.approval.beans.ApprovalDto;
 
 public interface ApprovalDao {
 	// 결재 받을 문서 리스트

@@ -1,4 +1,4 @@
-package com.bitgroupware.approval.vo;
+package com.bitgroupware.approval.beans;
 
 import org.springframework.web.multipart.MultipartFile;
 

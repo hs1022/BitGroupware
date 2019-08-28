@@ -1,4 +1,4 @@
-package com.bitgroupware.utils;
+package com.bitgroupware.approval.beans;
 
 public class SearchDto {
 	private String searchKeyword = "";         // 검색 키워드

@@ -11,11 +11,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.bitgroupware.approval.beans.ApprovalDoucemtDto;
+import com.bitgroupware.approval.beans.ApprovalFileDto;
 import com.bitgroupware.approval.persistence.ApprovalDao;
 import com.bitgroupware.approval.persistence.ApprovalDocumentDao;
 import com.bitgroupware.approval.service.ApprovalDocService;
-import com.bitgroupware.approval.vo.ApprovalDoucemtDto;
-import com.bitgroupware.approval.vo.ApprovalFileDto;
 import com.bitgroupware.utils.TemporaryFileUrl;
 
 
