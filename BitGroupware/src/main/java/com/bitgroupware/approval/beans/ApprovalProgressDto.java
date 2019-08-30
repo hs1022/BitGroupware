@@ -14,8 +14,8 @@ public class ApprovalProgressDto {
 	private String aprType;			// 결재종류
 	private String aprResult;		// 결재결과
 	private String aprComment;		// 코멘트
-	private String aprReceiveDate;	// 받은일자
-	private String aprSignDate;		// 결재일자
+	private String aprReceivedate;	// 받은일자
+	private String aprSigndate;		// 결재일자
 	private String memId;			// 사용자번호
 	private String rank;			// 직위
 }

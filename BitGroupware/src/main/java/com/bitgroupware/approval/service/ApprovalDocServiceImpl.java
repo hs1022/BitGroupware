@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bitgroupware.approval.beans.ApprovalDoucemtDto;
+import com.bitgroupware.approval.beans.ApprovalDocumentDto;
 import com.bitgroupware.approval.beans.ApprovalFileDto;
 import com.bitgroupware.approval.persistence.ApprovalDocumentDao;
 
@@ -23,20 +23,20 @@ public class ApprovalDocServiceImpl implements ApprovalDocService {
 	
 	// 모든 문서양식 불러오기
 	@Override
-	public List<ApprovalDoucemtDto> selectApprovalDocList() {
+	public List<ApprovalDocumentDto> selectApprovalDocList() {
 		return apDao.selectApprovalDocList();
 	}
 	
 	// 읽기
 	@Override
-	public ApprovalDoucemtDto selectApprovalDoc(String apdocNo) {
+	public ApprovalDocumentDto selectApprovalDoc(String apdocNo) {
 		return apDao.selectApprovalDoc(apdocNo);
 	}
 
 	// 등록(insert+update)
 	@Transactional
 	@Override
-	public void insertApprovalDoc(ApprovalDoucemtDto dto) {
+	public void insertApprovalDoc(ApprovalDocumentDto dto) {
 		if(dto.getApdocNo() == null || "".equals(dto.getApdocNo())) {
 			apDao.insertApprovalDoc(dto);
 			LOGGER.error("insertApprovalDoc");
@@ -50,7 +50,7 @@ public class ApprovalDocServiceImpl implements ApprovalDocService {
 
 	// 삭제
 	@Override
-	public void deleteApprovalDoc(ApprovalDoucemtDto dto) {
+	public void deleteApprovalDoc(ApprovalDocumentDto dto) {
 		apDao.deleteApprovalDoc(dto);
 	}
 
@@ -61,7 +61,7 @@ public class ApprovalDocServiceImpl implements ApprovalDocService {
 	}
 
 	@Override
-	public void updateApprovalDoc(ApprovalDoucemtDto dto) {
+	public void updateApprovalDoc(ApprovalDocumentDto dto) {
 		// TODO Auto-generated method stub
 		apDao.updateApprovalDoc(dto);
 		

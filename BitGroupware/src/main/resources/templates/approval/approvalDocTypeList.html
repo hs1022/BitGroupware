@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title>문서양식 폼</title>
+</head>
+<body>
+<div align="center">
+<h2>기안하기 - 문서양식 고르는 폼</h2>
+	<table border="1" >
+		<tr>
+			<td>문서명</td>
+			<td>문서내용</td>
+		</tr>
+		<tr th:each="approval:${approvalDocList}">
+			<td> <a th:href="@{/insertApprovalView(apdocNo=${approval.apdocNo})}" th:text="${approval.apdocName}"></a></td>
+			<td th:utext="${approval.apdocForm}"></td>
+		</tr>
+	</table>
+	</div>
+</body>
+
+</html>

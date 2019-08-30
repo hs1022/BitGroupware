@@ -1,9 +1,11 @@
+
+
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
 	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
 <meta charset="UTF-8">
-<title>전자결재 문서양식 작성(관리자)</title>
+<title>기안</title>
 <!-- include libraries(jQuery, bootstrap) -->
 <link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
 <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script> 
@@ -13,7 +15,9 @@
 <script th:src="@{/editor/summernote/summernote.js}"></script>
 <script>
 $(function(){
-	$("#apdocForm").summernote();
+	$("#apContent").summernote({
+		hegit:300
+	});
 });
 
 
@@ -21,42 +25,104 @@ $(function(){
 
 </head>
 <body th:align="center">
-	<form th:action="@{/admin/insertApprovalDoc}" method="post" enctype="multipart/form-data">
-		<input type="hidden" name="apdocNo" th:value="${apdocDto?.apdocNo}">
 
-		
-		<table th:align="center" border="1" th:cellpadding="0" th:cellspacing="0">
-			<tr>
-				<td th:text="문서명" width="80"></td>
-				<td><input name="apdocName" type="text" size="50" th:value="${apdocDto?.apdocName}"></td>
-			</tr>
 
-			<tr>
-				<td th:text="내용"></td>
-				<td><textarea name="apdocForm" cols="50" rows="50" id="apdocForm" th:utext="${apdocDto?.apdocForm}"></textarea></td>
-			</tr>
-		
-			<tr>
-				<td>파일</td>
-				<td> 
-				<input type="file" name="file" id="file" ><br>
-				</td>
-			</tr>
+<!-- 결재라인 -->
+<div class="row" style="margin-top: 10px">
+				<div id="signPath" class="signPath">
+					<c:forEach var="signlist" items="${signlist}" varStatus="status">
+					    <c:if test="${signlist.sstype ne '1'}">					
+							<div class="signArea">
+								<div class="signAreaTop"><c:out value="${signlist.userpos}"/></div>
+								<div class="signAreaCenter">
+									<c:choose>
+							        	<c:when test='${signlist.ssresult == "1"}'>승인</c:when>
+							        	<c:when test='${signlist.ssresult == "2"}'>반려</c:when>
+							         	<c:otherwise></c:otherwise>
+							      </c:choose>								
+								</div>
+								<div class="signAreaBottom"><c:out value="${signlist.usernm}"/> </div>
+							</div>
+						</c:if>
+					    <c:if test="${signlist.sstype eq '1'}">
+							<c:set var="cnt" value="${cnt + 1}" />		
+						</c:if>
+					</c:forEach>				
+				</div>
+				<div class="signTitle"><br>결<br><br>재</div>
+				
+				
+			</div>
+			<div>
 			
-			
-			
-			<tr>
-				<td colspan="2" align="center">
-				<input type="submit" value="저장" id="submitButton">
-				</td>
-			</tr>
-		</table>
-		<br/><br/>
-		<a th:href="@{/admin/selectApprovalDocList}">목록</a>
-		<a th:if="${apdocDto?.apdocNo != null}" th:href="@{/admin/deleteApprovalDoc(apdocNo=${apdocDto.apdocNo})}">게시글삭제</a>
-		
-	</form>
+<script type="text/javascript">
 
+var a = document.getElementById("finalSign");
+var aa = document.getElementById("finalSign").val;
+alert(a);
+consol.log(a);
+alert(aa);
+consol.log(aa);
+		document.write("<table border='0' cellspacing='0'>")
+		document.write("<tr>")
+		document.write("<td align='center'>")
+		document.write("<table border='1' cellspacing='1' cellpadding='0'>")
+		for (i = 1; i <= 3; i++) {
+			document.write("<tr>");
+			for (j = 1; j <= 5; j++) {
+				document
+						.write("<td width='50' height='20' bgcolor='#FFFFFF'>&nbsp;</td>");
+			}
+			document.write("</tr>");
+		}
+		document.write("</table>");
+		document.write("</td>");
+		document.write("</tr>");
+		document.write("</table>");
+		
+</script>
+</div>
+
+<!-- 글쓰기 -->
+	<div>
+		<form id="fom1" th:action="@{/insertApprovalDoc}" method="post"
+			enctype="multipart/form-data">
+			<input type="hidden" name="apNo" th:value="${apdocDto?.apNo}">
+			<input type="hidden" name="apDocstatus" th:value="${apdocDto?.apDocstatus}">
+			<input type="hidden" name="apdocNo" th:value="${apdocDto?.apdocNo}">
+			<input type="hidden" name="apSignpath" th:value="${apdocDto?.apSignpath}">
+			<input type="hidden" name="apContent" th:value="${apdocDto?.apContent}">
+			<table th:align="center" border="1" th:cellpadding="0"
+				th:cellspacing="0">
+				<tr>
+					<td th:text="문서명" width="80"></td>
+					<td><input name="apTitle" type="text" size="50" th:value="${apdocDto?.apTitle}"></td>
+				</tr>
+
+				<tr>
+					<td th:text="내용"></td>
+					<td><textarea name="apContent" cols="50" rows="50"
+							id="apContent" th:utext="${apdocDto?.apContent}"></textarea></td>
+				</tr>
+
+				<tr>
+					<td>파일</td>
+					<td><input type="file" name="file" id="file"><br>
+					</td>
+				</tr>
+
+
+				<tr>
+					<td colspan="2" align="center"><input type="submit" value="저장"
+						id="submitButton"></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+	
+	
+	<a th:href="@{/main}">목록</a><br>
+	<a th:if="${apdocDto?.apdocNo != null}" th:href="@{/deleteApprovalDoc(apdocNo=${apdocDto.apdocNo})}">게시글삭제</a>
 
 </body>
 </html>

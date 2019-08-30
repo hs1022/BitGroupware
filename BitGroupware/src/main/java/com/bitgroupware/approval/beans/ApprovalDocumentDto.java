@@ -1,18 +1,15 @@
 package com.bitgroupware.approval.beans;
 
 import lombok.Getter;
-import lombok.ToString;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @ToString
-public class ApprovalDoucemtDto {
+public class ApprovalDocumentDto {
 	private String 	apdocNo;	// 번호
 	private String	apdocName;	// 문서양식명
 	private String	apdocForm;	// 문서양식내용
 	private String 	finalSign;	// 최종 결재자
-
-	
-	
 }

@@ -2,7 +2,9 @@ package com.bitgroupware.approval.service;
 
 import java.util.List;
 
+import com.bitgroupware.approval.beans.ApprovalDocumentDto;
 import com.bitgroupware.approval.beans.ApprovalDto;
+import com.bitgroupware.approval.beans.ApprovalProgressDto;
 
 public interface ApprovalService {
 	
@@ -13,10 +15,10 @@ public interface ApprovalService {
 	List<?> selectApprovalListTo();
 	
 	// 읽기
-	ApprovalDto selectApproval();
+	ApprovalDto selectApproval(ApprovalDto apDto);
 	
 	// 기안
-	void insertApproval();
+	void insertApproval(ApprovalProgressDto aprDto,ApprovalDocumentDto dto);
 	
 	// 삭제
 	void deleteApproval();

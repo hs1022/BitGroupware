@@ -7,7 +7,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class PageDto {
+public class PageVO {
     private Integer displayRowCount = 10;           // 출력할 데이터 개수
     private Integer rowStart;                       // 시작행번호
     private Integer rowEnd;                         // 종료행 번호
