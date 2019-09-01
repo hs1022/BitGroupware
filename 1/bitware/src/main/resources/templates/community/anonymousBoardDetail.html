@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title>익명게시판 상세페이지</title>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script> 
+<script>
+window.onload=function(){
+	
+	document.getElementById("updateBtn").onclick=function(){
+		var bno = document.getElementById("bno").value;
+		var bpw = document.getElementById("bpw").value;
+		
+		$.ajax({
+			url:"/user/checkPwAjax",
+			data:{
+				bno:bno,
+				bpw:bpw
+			},
+			datatype:"text",
+			success:function(result){
+				if(result==false){
+					alert("비밀번호가 맞지 않습니다.");
+				}else{
+					document.getElementById("form").action="/user/updateAnonymousBoardView";
+					document.getElementById("form").submit();
+				}
+			}
+		});
+	}
+
+	document.getElementById("deleteBtn").onclick=function(){
+		var bno = document.getElementById("bno").value;
+		var bpw = document.getElementById("bpw").value;
+		
+		$.ajax({
+			url:"/user/checkPwAjax",
+			data:{
+				bno:bno,
+				bpw:bpw
+			},
+			datatype:"text",
+			success:function(result){
+				if(result==false){
+					alert("비밀번호가 맞지 않습니다.");
+				}else{
+					location.href="/user/deleteAnonymousBoard?bno="+bno;
+				}
+			}
+		});
+	}
+	
+	document.getElementById("replyBtn").onclick=function(){
+		document.getElementById("form").action="/user/insertAnonymousBoardReplyView";
+		document.getElementById("form").submit();
+	}
+}
+</script>
+</head>
+<body>
+<form id="form">
+	<input type="hidden" name="bno" id="bno" th:value="${anonymousBoard.bno}">
+	<input type="hidden" name="btitle" th:value="${anonymousBoard.btitle}">
+	<input type="hidden" name="bcontent" th:value="${anonymousBoard.bcontent}">
+	<input type="hidden" name="bgroup" th:value="${anonymousBoard.bgroup}">
+	<input type="hidden" name="bstep" th:value="${anonymousBoard.bstep}">
+	<input type="hidden" name="bindent" th:value="${anonymousBoard.bindent}">
+	<input type="hidden" name="bcnt" th:value="${anonymousBoard.bcnt}">
+	<table th:align="center" border="1" th:cellpadding="0" th:cellspacing="0">
+		<tr>
+			<td bgcolor="orange">번호</td>
+			<td th:text="${anonymousBoard.bno}"></td>
+		</tr>
+		<tr>
+			<td bgcolor="orange">조회수</td>
+			<td th:text="${anonymousBoard.bcnt}"></td>
+		</tr>
+		<tr>
+			<td bgcolor="orange">제목</td>
+			<td th:text="${anonymousBoard.btitle}"></td>
+		</tr>
+		<tr>
+			<td bgcolor="orange">내용</td>
+			<td th:text="${anonymousBoard.bcontent}"></td>
+		</tr>
+		<tr>
+			<td bgcolor="orange">비밀번호</td>
+			<td><input type="password" name="bpw" id="bpw"></td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<input type="button" id="updateBtn" value="수정하기">
+				<input type="button" id="deleteBtn" value="삭제하기">
+				<a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/user/deleteAnonymousBoard(bno=${anonymousBoard.bno})}">삭제하기(관리자)</a>
+				<input type="button" id="replyBtn" value="답변달기">
+				<a th:href="@{/user/selectAnonymousBoardList}">목록보기</a>
+			</td>
+		</tr>
+	</table>
+</form>
+</body>
+</html>

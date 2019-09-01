@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title>전자결재 문서양식 작성(관리자)</title>
+<!-- include libraries(jQuery, bootstrap) -->
+<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script> 
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script> 
+<!-- include summernote css/js -->
+<link th:href="@{/editor/summernote/summernote.css}" rel="stylesheet">
+<script th:src="@{/editor/summernote/summernote.js}"></script>
+<script>
+$(function(){
+	$("#apdocForm").summernote();
+});
+
+// // 파일 확장자 체크
+// if( $("#file").val() != "" ){
+//     var ext = $('#docufile').val().split('.').pop().toLowerCase();
+//   if($.inArray(ext, ['gif','png','jpg','jpeg','doc','docx','xls','xlsx','hwp']) == -1) {
+//      alert('등록 할수 없는 파일명입니다.');
+//      $("#file").val(""); // input file 파일명을 다시 지워준다.
+//      return;
+//  }
+// }
+// });
+
+
+</script>
+
+</head>
+<body th:align="center">
+	<form th:action="@{/admin/insertApprovalDoc}" method="post" enctype="multipart/form-data">
+<!-- 	<form method="post" enctype="multipart/form-data"> -->
+		<input type="hidden" name="apdocNo" th:value="${apdocDto?.apdocNo}">
+
+		
+		<table th:align="center" border="1" th:cellpadding="0" th:cellspacing="0">
+			<tr>
+				<td th:text="문서명" width="80"></td>
+				<td><input name="apdocName" type="text" size="50" th:value="${apdocDto?.apdocName}"></td>
+			</tr>
+
+			<tr>
+				<td th:text="내용"></td>
+				<td><textarea name="apdocForm" cols="50" rows="10" id="apdocForm" th:utext="${apdocDto?.apdocForm}"></textarea></td>
+			</tr>
+		
+			<tr>
+				<td>파일</td>
+				<td> 
+				<input type="file" name="file" id="file"><br>
+				</td>
+			</tr>
+			
+			<tr>
+				<td>최종 결재자</td>
+<!-- 				<label><input type="radio" name="finalSign" id="finalSign" value="1" th:attr="checkd=${apdocDto?.getFilnalSign().toString() == '1' ? 'true' : 'false'}">예</label> -->
+				<td>
+				<label>팀장<input type="radio" name="finalSign" id="finalSign" value="2" /></label>
+				<label>부장<input type="radio" name="finalSign" id="finalSign" value="3" /></label>
+				<label>이사<input type="radio" name="finalSign" id="finalSign" value="4" /></label>
+				<label>대표<input type="radio" name="finalSign" id="finalSign" value="5" /></label>		
+				</td>
+			</tr>
+
+			<tr>
+				<td colspan="2" align="center">
+				<input type="submit" value="저장" id="submitButton">
+				</td>
+			</tr>
+		</table>
+
+
+
+		<!-- 		<div id="fileDiv"> -->
+<!-- 			<p> -->
+<!-- 				<input type="file" id="file" name="file_0"> -->
+<!-- 				<a href="#this" id="delete" name="delete">삭제</a> -->
+<!-- 			</p> -->
+<!-- 		</div> -->
+		
+		<br/><br/>
+<!-- 		<a href="#this" id="addFile">파일추가</a> -->
+<!-- 		<a th:href="@{/admin/insertApprovalDoc}" id="write">저장</a> -->
+<!-- 		<a th:href="#this" id="write">저장</a> -->
+		<a th:href="@{/admin/selectApprovalDocList}">목록</a>
+<!-- 		<a href="#this" id="list">목록</a> -->
+		<a th:if="${apdocDto?.apdocNo != null}" th:href="@{/admin/deleteApprovalDoc(apdocNo=${apdocDto.apdocNo})}">게시글삭제</a>
+		
+	</form>
+	
+<!-- 	<h3>Uploaded Files:</h3> -->
+       
+<!--       <ul th:each="file : ${uploadedFiles}"> -->
+<!--          <li th:utext="${file}"></li>   -->
+<!--       </ul>  -->
+	
+<!-- 	<h3>Failed:</h3> -->
+<!--       <ul th:each="file : ${failedFiles}"> -->
+<!--          <li style="color:red;" th:utext="${file}"></li>   -->
+<!--       </ul> -->
+
+
+	<!-- 	<script type="text/javascript">
+		var gfv_count=1;
+		
+		$(document).ready(function(){
+			$("#list").on("click",function(e){
+				e.preventDefault();
+				fn_selectApprovalDocList();
+			});
+			
+			$("#write").on("click",function(e){
+// 				e.preventDefault();
+				fn_insertApprovalDoc();
+			});
+			
+			$("#addFile").on("click",function(e){
+				e.preventDefault();
+				fn_insertApprovalDocFile();
+			});
+			
+			$("a[name='delete']").on("click",function(e){
+				e.preventDefault();
+				fn_deleteApprovalDocFile($(this));
+			});
+			
+		});
+	
+		function fn_selectApprovalDocList(){
+			var comSubmit = new ComSubmit();
+			comSubmit.setUrl("<c:url value='/admin/selectApprovalDocList' />");
+			comSubmit.submit();
+		}
+		
+		function fn_insertApprovalDoc(){
+			var comSubmit = new ComSubmit("insertApprovalDoc");
+			comSubmit.setUrl("<c:url value='/admin/insertApprovalDoc' />");
+			comSubmit.submit();
+		}
+		
+		function fn_insertApprovalDocFile(){
+			var str="<p><input type='file' name='file_"+(gfv_count++)+"'><a href='#this' name='delete'>삭제</a></p>";
+			$("#fileDiv").append(str);
+			$("a[name='delete']").on("click",function(e){
+				e.preventDefault();
+				fn_deleteApprovalDocFile($(this));
+			});
+		}
+		
+		function fn_deleteApprovalDocFile(obj){
+			obj.parent().remove();
+		}
+	</script> -->
+	
+	
+<!-- 	<a th:href="@{/admin/selectApprovalDocList}">목록</a> -->
+<!-- 	<a th:if="${apdocDto?.apdocNo != null}" th:href="@{/admin/deleteApprovalDoc(apdocNo=${apdocDto.apdocNo})}">삭제</a> -->
+
+</body>
+</html>

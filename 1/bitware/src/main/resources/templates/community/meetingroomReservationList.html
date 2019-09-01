@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title>회의실 예약</title>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script>
+<link th:href='@{/fullcalendar/packages/core/main.css}' rel='stylesheet' />
+<link th:href='@{/fullcalendar/packages/daygrid/main.css}' rel='stylesheet' />
+<link th:href='@{/fullcalendar/packages/timegrid/main.css}' rel='stylesheet' />
+<link th:href='@{/fullcalendar/packages/list/main.css}' rel='stylesheet' />
+<script th:src='@{/fullcalendar/packages/core/main.js}'></script>
+<script th:src='@{/fullcalendar/packages/interaction/main.js}'></script>
+<script th:src='@{/fullcalendar/packages/daygrid/main.js}'></script>
+<script th:src='@{/fullcalendar/packages/timegrid/main.js}'></script>
+<script th:src='@{/fullcalendar/packages/list/main.js}'></script>
+<link th:href="@{/rome/dist/rome.css}" rel="stylesheet">
+<script th:src="@{/rome/dist/rome.js}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+	var modal = document.getElementById('myModal');
+	
+	var calendarEl = document.getElementById('calendar');
+	  
+	var calendar = new FullCalendar.Calendar(calendarEl, {
+		plugins: [ 'interaction', 'dayGrid', 'timeGrid', 'list' ],
+	  	header: {
+      		left: 'prev,next today',
+      		center: 'title',
+     		right: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
+      	},
+     	defaultDate: new Date(),
+      	locale: 'ko',
+      	navLinks: true, // can click day/week names to navigate views
+      	businessHours: true, // display business hours
+      	editable: false,
+      	selectable: true,
+        select: function() {
+        	modal.style.display = "block";
+            calendar.unselect()
+        },
+    });
+	$.ajax({
+		type: "post",
+		url: "/user/selectMeetingroomReservationListAjax",
+		data: {},
+		dataType: "json",
+		success:function(meetingroomReservation){
+			for(var i=0 in meetingroomReservation){
+				if(meetingroomReservation[i].meetingroom.mrNo==1) var color = "#000000";
+				if(meetingroomReservation[i].meetingroom.mrNo==2) var color = "#ff0000";
+				if(meetingroomReservation[i].meetingroom.mrNo==3) var color = "#00ff00";
+				if(meetingroomReservation[i].meetingroom.mrNo==4) var color = "#0000ff";
+				calendar.addEvent({
+	            	title: meetingroomReservation[i].meetingroom.mrName+" "+meetingroomReservation[i].member.memName,
+	                start: meetingroomReservation[i].mrResStart+":00",
+	                end: meetingroomReservation[i].mrResEnd+":00",
+	                color: color
+	            });
+			}
+		}
+	});
+    calendar.render();
+});
+</script>
+<style>
+  body {
+    margin: 40px 10px;
+    padding: 0;
+    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+    font-size: 14px;
+  }
+  #calendar {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+</style>
+<script>
+window.onload=function(){
+	
+	var msg = document.getElementById('msg').value;
+	if(msg!=""){
+		alert(msg);
+	}
+	
+	var modal = document.getElementById('myModal');
+// 	document.getElementById("myBtn").onclick = function() {
+//     	modal.style.display = "block";
+// 	}
+	document.getElementsByClassName("close")[0].onclick = function() {
+    	modal.style.display = "none";
+	}
+	window.onclick = function(event) {
+    	if (event.target == modal) {
+        	modal.style.display = "none";
+    	}
+	}
+}
+</script>
+<style>
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 2; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 50%; /* Could be more or less, depending on screen size */                          
+}
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+</style>
+<script>
+$(function(){
+	var moment = rome.moment;
+	var today = moment().format();
+
+	var startDate = rome(startDateElem, {dateValidator : rome.val.afterEq(today)});
+	var endDate =rome(endDateElem, {dateValidator:function(d){
+	  var m = moment(d);
+	  var startD=rome(startDateElem).getDate();
+	  if(startD){     
+	    return m.isAfter(today)&& m.isAfter(startD);
+	  }else{
+	    return m.isAfter(today)
+	  }   
+	 }
+	});
+});
+</script>
+</head>
+<body>
+<input type="hidden" th:value="${msg}" id="msg">
+<div id="myModal" class="modal">
+	<div class="modal-content">
+		<span class="close">&times;</span>                                                               
+    	<form action="/user/insertMeetingroomReservation">
+    	<h3>예약하기</h3>
+    	<table>
+    		<tr>
+    			<td>회의실 선택</td>
+    			<td colspan="2">
+    				<select name="mrNo">
+    					<span th:each="meetingroom:${meetingroomList}">
+							<option th:value="${meetingroom.mrNo}" th:text="${meetingroom.mrName}"></option>
+						</span>
+					</select>
+    			</td>
+    		</tr>
+    		<tr>
+    			<td>Start Date</td>
+    			<td><input type="text" id="startDateElem" name="mrResStart" class="form-control" autocomplete="off"></td>
+    		</tr>
+    		<tr>
+    			<td>End Date</td>
+    			<td><input type="text" id="endDateElem" name="mrResEnd" class="form-control" autocomplete="off"></td>
+    		</tr>
+    	</table>
+		<input type="submit" value="예약하기">
+		</form>
+		<h3>예약취소하기</h3>
+		<table>
+			<tr>
+				<td>예약</td>
+				<td>취소</td>
+			</tr>
+			<tr th:each="meetingroomReservation:${meetingroomReservationList}">
+				<td>
+					<span th:text="${meetingroomReservation.meetingroom.mrName}"></span>&nbsp;
+					<span th:text="${meetingroomReservation.mrResStart}"></span>&nbsp;
+					<span th:text="${meetingroomReservation.mrResEnd}"></span>&nbsp;
+					<span th:text="${#dates.format(meetingroomReservation.mrResDate,'yyyy-MM-dd HH:mm')}"></span>
+				</td>
+				<td><a th:href="@{/user/deleteMeetingroomReservation(mrResNo=${meetingroomReservation.mrResNo})}">취소</a></td>
+			</tr>
+		</table>
+	</div>
+</div>
+<div id='calendar'></div>
+</body>
+</html>

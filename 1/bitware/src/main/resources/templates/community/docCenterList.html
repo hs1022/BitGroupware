@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title>공지사항 목록페이지</title>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script> 
+<script>
+$(function(){
+	var cate = $("#searchCondition").val();
+	$("#category option[value="+cate+"]").attr("selected",true);
+	
+	var keyword = $("#searchKeyword").val();
+	$("#keyword").val(keyword);
+});
+</script>
+<script>
+$(document).ready(function() {
+	var xOffset = 10;
+    var yOffset = 30;
+    $(document).on("mouseover",".thumbnail",function(e){
+    	$("body").append("<p id='preview'><img src='"+ $(this).attr("value") +"' height='200px' /></p>");                     
+        $("#preview")
+        	.css("top",(e.pageY - xOffset) + "px")
+            .css("left",(e.pageX + yOffset) + "px")
+            .fadeIn("fast");
+    });
+    $(document).on("mousemove",".thumbnail",function(e){
+        $("#preview")
+        	.css("top",(e.pageY - xOffset) + "px")
+            .css("left",(e.pageX + yOffset) + "px");
+    });
+    $(document).on("mouseout",".thumbnail",function(){
+       	$("#preview").remove();
+    });
+});
+</script>
+<style>
+#preview{
+	z-index: 9999;
+    position:absolute;
+    border:0px solid #ccc;
+    background:#333;
+    padding:1px;
+    display:none;
+    color:#fff;
+}
+</style>
+</head>
+<body>
+<!-- 검색 시작 -->
+<form th:action="@{/user/selectDocCenterList}">
+<table th:align="center" border="1" th:cellpadding="0" th:cellspacing="0" th:width="700">
+<tr>
+    <td align="right">
+        <select name="searchCondition" id="category">
+        	<option value="docCate">분류</option>
+        	<option value="docTitle">제목</option>
+        	<option value="docContent">내용</option>
+        </select>
+        <input name="searchKeyword" id="keyword" type="text">
+        <input type="submit" value="검색">
+    </td>
+</tr>
+</table>
+</form>
+<input type="hidden" id="searchCondition" th:value="${search.searchCondition}">
+<input type="hidden" id="searchKeyword" th:value="${search.searchKeyword}">
+<!-- 검색 종료 -->
+
+<table th:align="center" border="1" th:cellpadding="0" th:cellspacing="0" th:width="700">
+	<tr>
+		<th bgcolor="orange" width="100">분류</th>
+		<th bgcolor="orange" width="400">제목</th>
+		<th bgcolor="orange" width="100">등록일</th>
+		<th bgcolor="orange" width="100">첨부파일</th>
+		<th bgcolor="orange" width="100">조회수</th>
+	</tr>
+	<tr th:each="docCenter:${docCenterList}">
+		<td th:text="${docCenter.docCate}"></td>
+        <td>
+        	<a th:href="@{/user/selectDocCenter(docNo=${docCenter.docNo})}" th:text="${docCenter.docTitle}"></a>
+        	<span th:each="docCenterFile:${docCenter.docCenterFileList}">
+        		<span th:if="${docCenterFile.docFileType=='image'}">
+        			<img th:src="@{/images/fileImage.png}" style="width: 5px; height: 5px">
+        			<span th:text="${docCenterFile.docFileName}" class="thumbnail" th:value="${docCenterFile.docFileUrl}" style="font-size: 5px"></span>
+        		</span>
+        		<span th:if="${docCenterFile.docFileType=='document'}">
+        			<img th:src="@{/images/fileImage.png}" style="width: 5px; height: 5px">
+        			<span th:text="${docCenterFile.docFileName}" style="font-size: 5px"></span>
+        		</span>
+        	</span>
+        </td>
+    	<div th:if="${today==#dates.format(docCenter.docDate,'yyyy-MM-dd')}">
+			<td th:text="${#dates.format(docCenter.docDate,'HH:mm')}"></td>
+		</div>
+		<div th:unless="${today==#dates.format(docCenter.docDate,'yyyy-MM-dd')}">
+			<td th:text="${#dates.format(docCenter.docDate,'yyyy-MM-dd')}"></td>
+		</div>
+    	<div th:if="${docCenter.docFileCheck=='Y'}">
+			<td><img th:src="@{/images/fileImage.png}" style="width: 10px; height: 10px"></td>
+		</div>
+		<div th:unless="${docCenter.docFileCheck=='Y'}">
+			<td></td>
+		</div>
+		<td th:text="${docCenter.docCnt}"></td>
+	</tr>
+</table>
+<br>
+<table th:align="center">
+	<tr>
+		<td colspan="5">
+			<span th:if="${page.curBlock > 1 }">
+				<a th:href="@{/user/selectDocCenterList(curPage=${page.prevPage},searchCondition=${search.searchCondition},searchKeyword=${search.searchKeyword})}">[이전]</a>
+			</span>
+			<span th:if="${page.curBlock > 1 }">
+				<a th:href="@{/user/selectDocCenterList(curPage=1,searchCondition=${search.searchCondition},searchKeyword=${search.searchKeyword})}">1</a>
+			</span>
+			<span th:each="num:${block}">
+				<span th:if="${num==page.curPage }">
+					<a th:href="@{/user/selectDocCenterList(curPage=${num},searchCondition=${search.searchCondition},searchKeyword=${search.searchKeyword})}" th:text="${num}" style="color:orange;"></a>
+				</span>
+				<span th:unless="${num==page.curPage }">
+					<a th:href="@{/user/selectDocCenterList(curPage=${num},searchCondition=${search.searchCondition},searchKeyword=${search.searchKeyword})}" th:text="${num}"></a>
+				</span>
+			</span>
+			<span th:if="${page.curBlock < page.totBlock }">
+				<a th:href="@{/user/selectDocCenterList(curPage=${page.totPage},searchCondition=${search.searchCondition},searchKeyword=${search.searchKeyword})}" th:text="${page.totPage}"></a>
+			</span>
+			<span th:if="${page.curBlock < page.totBlock }">
+				<a th:href="@{/user/selectDocCenterList(curPage=${page.nextPage},searchCondition=${search.searchCondition},searchKeyword=${search.searchKeyword})}">[다음]</a>
+			</span>
+		</td>
+	</tr>
+</table>
+</body>
+</html>

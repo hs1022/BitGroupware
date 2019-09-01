@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script src="/webjars/jquery/jquery.min.js"></script>
+<script src="../js/chat/run.js"></script>
+<style>
+	.tab ul::after{content:'';display:block;clear:both;}
+	.tab ul li{float:left;margin:0 15px;}
+	
+	.info.hidden{display:none;}
+</style>
+<script type="text/javascript">
+	$(function(){
+		$(".memberId").click(function(){
+			var memId = $(this).val();
+			var url = "/chat?memId=" + memId;
+			var name = "popup test";
+			var option = "width=500, height=500, top=100, left=200, location=no"
+			window.open(url, name, option);
+		})
+	});
+</script>
+</head>
+<body>
+<div>
+	<div class="tab">
+		<ul>
+			<li class="on"><a href="#dep1">지원부</a></li>
+			<li><a href="#dep2">영업부</a></li>
+			<li><a href="#dep3">개발부</a></li>
+		</ul>
+	</div>
+	<div>
+		<div class="info">
+			<ul>
+				<th:block th:each="member : ${memberList}" th:if="${member.deptName} == '지원부'">
+					<li class="memberId" th:value="${member.memId}" th:text="${member.memName}"></li>
+				</th:block>
+			</ul>
+		</div>
+		<div class="info hidden">
+			<ul>
+				<th:block th:each="member : ${memberList}" th:if="${member.deptName} == '영업부'">
+					<li class="memberId" th:value="${member.memId}" th:text="${member.memName}"></li>
+				</th:block>
+			</ul>
+		</div>
+		<div class="info hidden">
+			<ul>
+				<th:block th:each="member : ${memberList}" th:if="${member.deptName} == '개발부'">
+					<li class="memberId" th:value="${member.memId}" th:text="${member.memName}"></li>
+				</th:block>
+			</ul>
+		</div>
+	</div>
+</div>
+</body>
+</html>

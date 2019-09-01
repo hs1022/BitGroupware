@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title>공지사항 상세페이지(수정)(관리자용)</title>
+<!-- include libraries(jQuery, bootstrap) -->
+<link href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.css" rel="stylesheet">
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script> 
+<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.js"></script>
+<!-- image resize -->
+<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css"> 
+<!-- include summernote css/js -->
+<link th:href="@{/editor/summernote/summernote.css}" rel="stylesheet">
+<script th:src="@{/editor/summernote/summernote.js}"></script>
+<script>
+$(function(){
+	$("#ntContent").summernote();
+	$(".resizable img").resizable();
+});
+</script>
+<script>
+<!--image resize-->
+$(document).on('mouseout','.fileDrop',function(){
+	$(".resizable img").resizable();
+});
+</script>
+<script>
+$(function(){
+	var cate = $("#ntCate").val();
+	$("#category option[value="+cate+"]").attr("selected",true);
+});
+</script>
+<script>
+$(function(){
+	$(".uploadList").on("click","span",function(e){
+		var that=$(this); //클릭한 span 태그
+		$.ajax({
+			url:"/admin/deleteNoticeFileAjax",
+			type:"post",
+			data:{fileUrl:$(this).attr("data-src")},
+			dataType:"text",
+			success:function(result){
+				if(result=="deleted"){
+					that.parent("div").remove();
+				}
+			}
+		});
+	});
+	$(".fileDrop").on("dragenter dragover",function(e){
+		e.preventDefault();
+	});
+	$(".fileDrop").on("drop",function(e){
+		e.preventDefault();
+		var files=e.originalEvent.dataTransfer.files;
+		var file=files[0];
+		var formData=new FormData();
+		formData.append("file",file);
+		$.ajax({
+			url: "/admin/uploadAjax",
+			data: formData,
+			dataType: "text",
+			processData: false,
+			contentType: false,
+			type: "post",
+			success:function(fileUrl){
+				var str="";
+				if(checkImageType(fileUrl)){
+					str="<div><div class='resizable ui-widget-content' style='border: 0px solid #c5c5c5;'>";
+					str+="<img src="+fileUrl+" style='height:100px'></div>";
+					str+="<a href='/admin/displayFile?fileUrl="+fileUrl+"'>"+getFileName(fileUrl)+"</a><span data-src="+fileUrl+">[삭제]</span></div>";
+				}else{
+					str="<div><div class='resizable ui-widget-content' style='border: 0px solid #c5c5c5;'>";
+					str+="<img src='/images/fileImage.png' style='height:100px'></div>";
+					str+="<a href='/admin/displayFile?fileUrl="+fileUrl+"'>"+getFileName(fileUrl)+"</a><span data-src="+fileUrl+">[삭제]</span></div>";
+				}
+				$(".uploadList").append(str);
+			}
+		});
+	});
+});
+function getFileName(fileUrl){
+	var idx=fileUrl.indexOf("_")+1;
+	return fileUrl.substr(idx);
+}
+function checkImageType(fileUrl){
+	var pattern=/jpg|gif|png|jpeg/i; 
+	return fileUrl.match(pattern); 
+}
+</script>
+<style>
+.fileDrop {
+	width: 100%;
+	height: 200px;
+	border: 1px dotted gray;
+	background-color: gray;
+}
+</style>
+</head>
+<body th:align="center">
+<form th:action="@{/admin/updateNotice}" method="post">
+<input type="hidden" th:value="${notice.ntNo}" name="ntNo">
+<input type="hidden" th:value="${notice.ntDelCheck}" name="ntDelCheck">
+<input type="hidden" th:value="${notice.ntCnt}" name="ntCnt">
+<input type="hidden" th:value="${notice.ntCate}" id="ntCate">
+
+<table th:align="center" border="1" th:cellpadding="0" th:cellspacing="0">
+<tr>
+	<td bgcolor="orange" th:text="분류" width="80"></td>
+	<td>
+		<select name="ntCate" id="category">
+        	<option value="일반">일반</option>
+        	<option value="개발">개발</option>
+        	<option value="영업">영업</option>
+        </select>
+    </td>
+</tr>
+<tr>
+	<td bgcolor="orange" th:text="제목" width="80"></td>
+	<td><input name="ntTitle" type="text" size="50" th:value="${notice.ntTitle}"></td>
+</tr>
+<tr>
+	<td bgcolor="orange" th:text="작성자"></td>
+	<td><span sec:authentication="principal.member.memName"></span></td>
+</tr>
+<tr>
+	<td bgcolor="orange" th:text="내용"></td>
+	<td><textarea name="ntContent" cols="50" rows="10" id="ntContent" th:utext="${notice.ntContent}"></textarea></td>
+</tr>
+<tr>
+	<td bgcolor="orange" th:text="첨부파일" width="80"></td>
+	<td align="left">
+	<div> 첨부파일을 드래그앤 드롭 하여 등록하세요
+		<div class="fileDrop"></div>
+		<div class="uploadList">
+			<div th:each="noticeFile:${notice.noticeFileList}">
+				<div th:if="${noticeFile.ntFileType=='image'}">
+					<div class="resizable ui-widget-content" style="border: 0px solid #c5c5c5;">
+					<img th:src="${noticeFile.ntFileUrl}" style="height:100px"></div>
+					<a th:href="@{/admin/displayFile(fileUrl=${noticeFile.ntFileUrl})}" th:text="${noticeFile.ntFileName}"></a>
+					<span th:attr="data-src=${noticeFile.ntFileUrl}">[삭제]</span>
+				</div>
+				<div th:if="${noticeFile.ntFileType=='document'}">
+					<div class="resizable ui-widget-content" style="border: 0px solid #c5c5c5;">
+					<img th:src="@{/images/fileImage.png}" style="height:100px"></div>
+					<a th:href="@{/admin/displayFile(fileUrl=${noticeFile.ntFileUrl})}" th:text="${noticeFile.ntFileName}"></a>
+					<span th:attr="data-src=${noticeFile.ntFileUrl}">[삭제]</span>
+				</div>
+			</div>
+		</div>
+	</div>
+	</td>
+</tr>	
+<tr>
+	<td colspan="2" align="center">
+		<input type="submit" value="수정하기">
+		<a th:href="@{/admin/deleteNotice(ntNo=${notice.ntNo})}">삭제</a>
+	</td>
+</tr>
+</table>
+</form>
+<a th:href="@{/admin/selectNoticeList}">글목록</a>
+</body>
+</html>

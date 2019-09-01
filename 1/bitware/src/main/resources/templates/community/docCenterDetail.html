@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title>공지사항 상세페이지</title>
+<!-- image resize -->
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script> 
+<script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css"> 
+<script>
+$(function(){
+	$(".resizable img").resizable();
+});
+</script>
+</head>
+<body th:align="center">
+<table th:align="center" border="1" th:cellpadding="0" th:cellspacing="0">
+<tr>
+	<td bgcolor="orange" th:text="분류" width="80"></td>
+	<td th:text="${docCenter.docCate}"></td>
+</tr>
+<tr>
+	<td bgcolor="orange" th:text="제목" width="80"></td>
+	<td th:text="${docCenter.docTitle}"></td>
+</tr>
+<tr>
+	<td bgcolor="orange" th:text="작성자"></td>
+	<td><span sec:authentication="principal.member.memName"></span></td>
+</tr>
+<tr>
+	<td bgcolor="orange" th:text="내용"></td>
+	<td th:utext="${docCenter.docContent}"></td>
+</tr>
+<tr>
+	<td bgcolor="orange" th:text="첨부파일" width="80"></td>
+	<td align="left">
+		<div th:each="docCenterFile:${docCenter.docCenterFileList}">
+			<div th:if="${docCenterFile.docFileType=='image'}">
+				<div class="resizable ui-widget-content" style="border: 0px solid #c5c5c5;">
+				<img th:src="${docCenterFile.docFileUrl}" style="height:100px"></div>
+				<a th:href="@{/user/displayFile(fileUrl=${docCenterFile.docFileUrl})}" th:text="${docCenterFile.docFileName}"></a>
+			</div>
+			<div th:if="${docCenterFile.docFileType=='document'}">
+				<div class="resizable ui-widget-content" style="border: 0px solid #c5c5c5;">
+				<img th:src="@{/images/fileImage.png}" style="height:100px"></div>
+				<a th:href="@{/user/displayFile(fileUrl=${docCenterFile.docFileUrl})}" th:text="${docCenterFile.docFileName}"></a>
+			</div>
+		</div>
+	</td>
+</tr>	
+</table>
+<a th:href="@{/user/selectDocCenterList}">글목록</a>
+</body>
+</html>

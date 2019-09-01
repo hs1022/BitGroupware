@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>사원 목록 (관리자)</title>
+</head>
+<body th:align="center">
+	<h1>사원 목록</h1>
+	<table th:align="center" border="1" th:cellpadding="0" th:width="700">
+		<tr>
+			<th>이름</th>
+			<th>사원번호</th>
+			<th>직급</th>
+			<th>전화번호</th>
+			<th>내선번호</th>
+			<th>재직현황</th>
+		</tr>
+		<tr th:each="member : ${memberList}">
+			<td><a th:href="@{/admin/updateMemberView(memId=${member.memId})}" th:text="${member.memName}"></a></td>
+			<td th:text="${member.memId}">
+			<td th:text="${member.ranks.ranks}">
+			<td th:text="${member.memTel}">
+			<td th:text="${member.memOfficeTel}">
+			<td th:text="${member.memStatus}">
+		</tr>
+	</table>
+	<a th:href="@{/admin/insertMemberView}">사원 등록</a>
+</body>
+</html>
