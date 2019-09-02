@@ -2,33 +2,32 @@ package com.bitgroupware.approval.service;
 
 import java.util.List;
 
-import com.bitgroupware.approval.beans.ApprovalDocumentDto;
 import com.bitgroupware.approval.beans.ApprovalDto;
-import com.bitgroupware.approval.beans.ApprovalProgressDto;
+import com.bitgroupware.member.vo.MemberVo;
 
 public interface ApprovalService {
 	
 	// 결재 받을 문서 리스트
-	List<?> selectApprovalListTobe();
+	List<ApprovalDto> selectApprovalListToBeByTotal(String memId);
+	List<ApprovalDto> selectApprovalListToBe(String memId, String status);
 	
 	// 결재 할 문서 리스트
-	List<?> selectApprovalListTo();
+	List<ApprovalDto> selectApprovalListTo(String memId);
 	
 	// 읽기
-	ApprovalDto selectApproval(ApprovalDto apDto);
+	ApprovalDto selectApproval(String apNo);
 	
 	// 기안
-	void insertApproval(ApprovalProgressDto aprDto,ApprovalDocumentDto dto);
+	void insertApproval(ApprovalDto approval, MemberVo member);
 	
-	// 삭제
-	void deleteApproval();
+	int selectRanksNo(String memId);
 	
-	// 결재 경로
-	List<?> selectSign(String string);
+	void updateApproval(ApprovalDto approval, MemberVo member);
 	
-	// 마지막 결재 경로
-	List<?> selectLineLast();
+	void updateApprovalCancel(String apNo, String apComment);
 	
-	// 결재
-	void updateApproval();
+	
+
+
+	
 }

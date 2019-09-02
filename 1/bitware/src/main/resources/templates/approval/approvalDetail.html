@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+<meta charset="UTF-8">
+<title>approval Detail</title>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.js"></script> 
+<script>
+$(function(){
+	$(".okBtn").click(function(){
+		var apNo = $("#apNo").val();
+		var finalSign = $("#finalSign").val();
+		var ranksNo = $("#ranksNo").val();
+		var check = confirm("승인하시겠습니까?");
+		if(check){
+			location.href="/user/updateApproval?apNo="+apNo+"&finalSign="+finalSign+"&ranksNo="+ranksNo;
+		}
+	});
+	$(".cancelBtn").click(function(){
+		var apNo = $("#apNo").val();
+		var apComment = prompt("반려이유를 적어주세요","");
+		if(apComment){
+			location.href="/user/updateApprovalCancel?apNo="+apNo+"&apComment="+apComment;
+		}
+	});
+});
+</script>
+</head>
+<body>
+<table border="1">
+<input type="hidden" id="apNo" th:value="${approval.apNo}">
+<input type="hidden" id="finalSign" th:value="${approval.finalSign}">
+<input type="hidden" id="ranksNo" th:value="${ranksNo}">
+	<tr>
+		<td>사원</td>
+		<td>팀장</td>
+		<td>부장</td>
+		<td>이사</td>
+		<td>사장</td>
+	</tr>
+	<tr>
+		<td>
+			<th:block th:if="${approval.apSignUrl1!=null}">
+				<img th:src="${approval.apSignUrl1}">
+			</th:block>
+			<th:block th:unless="${approval.apSignUrl1!=null}">
+				<th:block th:if="${ranksNo<=1&&approval.finalSign>=1}">
+					<th:block th:if="${ranksNo==1}">
+						<input type="button" class="okBtn" value="승인"><br>
+						<input type="button" class="cancelBtn" value="반려">
+					</th:block>
+					<th:block th:unless="${ranksNo==1}">
+					</th:block>
+				</th:block>
+				<th:block th:unless="${ranksNo<=1&&approval.finalSign>=1}">
+					<img th:src="@{/images/cancel.png}">
+				</th:block>
+			</th:block>
+		</td>
+		<td>
+			<th:block th:if="${approval.apSignUrl2!=null}">
+				<img th:src="${approval.apSignUrl2}">
+			</th:block>
+			<th:block th:unless="${approval.apSignUrl2!=null}">
+				<th:block th:if="${ranksNo<=2 && approval.finalSign>=2}">
+					<th:block th:if="${ranksNo==2}">
+						<input type="button" class="okBtn" value="승인"><br>
+						<input type="button" class="cancelBtn" value="반려">
+					</th:block>
+					<th:block th:unless="${ranksNo==2}">
+					</th:block>
+				</th:block>
+				<th:block th:unless="${ranksNo<=2&&approval.finalSign>=2}">
+					<img th:src="@{/images/cancel.png}">
+				</th:block>
+			</th:block>
+		</td>
+		<td>
+			<th:block th:if="${approval.apSignUrl3!=null}">
+				<img th:src="${approval.apSignUrl3}">
+			</th:block>
+			<th:block th:unless="${approval.apSignUrl3!=null}">
+				<th:block th:if="${ranksNo<=3&&approval.finalSign>=3}">
+					<th:block th:if="${ranksNo==3}">
+						<input type="button" class="okBtn" value="승인"><br>
+						<input type="button" class="cancelBtn" value="반려">
+					</th:block>
+					<th:block th:unless="${ranksNo==3}">
+					</th:block>
+				</th:block>
+				<th:block th:unless="${ranksNo<=3&&approval.finalSign>=3}">
+					<img th:src="@{/images/cancel.png}">
+				</th:block>
+			</th:block>
+		</td>
+		<td>
+			<th:block th:if="${approval.apSignUrl4!=null}">
+				<img th:src="${approval.apSignUrl4}">
+			</th:block>
+			<th:block th:unless="${approval.apSignUrl4!=null}">
+				<th:block th:if="${ranksNo<=4&&approval.finalSign>=4}">
+					<th:block th:if="${ranksNo==4}">
+						<input type="button" class="okBtn" value="승인"><br>
+						<input type="button" class="cancelBtn" value="반려">
+					</th:block>
+					<th:block th:unless="${ranksNo==4}">
+					</th:block>
+				</th:block>
+				<th:block th:unless="${ranksNo<=4&&approval.finalSign>=4}">
+					<img th:src="@{/images/cancel.png}">
+				</th:block>
+			</th:block>
+		</td>
+		<td>
+			<th:block th:if="${approval.apSignUrl5!=null}">
+				<img th:src="${approval.apSignUrl5}">
+			</th:block>
+			<th:block th:unless="${approval.apSignUrl5!=null}">
+				<th:block th:if="${ranksNo<=5&&approval.finalSign>=5}">
+					<th:block th:if="${ranksNo==5}">
+						<input type="button" class="okBtn" value="승인"><br>
+						<input type="button" class="cancelBtn" value="반려">
+					</th:block>
+					<th:block th:unless="${ranksNo==5}">
+					</th:block>
+				</th:block>
+				<th:block th:unless="${ranksNo<=5&&approval.finalSign>=5}">
+					<img th:src="@{/images/cancel.png}">
+				</th:block>
+			</th:block>
+		</td>
+	</tr>
+	<tr>
+		<td th:text="${approval.apSignName1}"></td>
+		<td th:text="${approval.apSignName2}"></td>
+		<td th:text="${approval.apSignName3}"></td>
+		<td th:text="${approval.apSignName4}"></td>
+		<td th:text="${approval.apSignName5}"></td>
+	</tr>
+</table>
+</body>
+</html>
+
+
+<!-- <th:block th:if="${approval.apSignUrl5!=null}"> -->
+<!-- 			<td><img th:src="${approval.apSignUrl5}"></td> -->
+<!-- 		</th:block> -->
+<!-- 		<th:block th:unless="${approval.apSignUrl5!=null}"> -->
+<!-- 			<th:block th:if="${ranksNo<=5&&approval.finalSign>=5}"> -->
+<!-- 				<th:block th:if="${ranksNo==5}"> -->
+<!-- 					<td><input type="button" class="okBtn" value="승인"><br> -->
+<!-- 					<input type="button" class="cancelBtn" value="반려"></td> -->
+<!-- 				</th:block> -->
+<!-- 				<th:block th:unless="${ranksNo==5}"> -->
+<!-- 					<td></td> -->
+<!-- 				</th:block> -->
+<!-- 			</th:block> -->
+<!-- 		</th:block> -->

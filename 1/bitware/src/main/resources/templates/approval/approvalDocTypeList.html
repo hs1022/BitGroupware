@@ -14,7 +14,7 @@
 			<td>문서내용</td>
 		</tr>
 		<tr th:each="approval:${approvalDocList}">
-			<td> <a th:href="@{/insertApprovalView(apdocNo=${approval.apdocNo},finalSign=${approval.finalSign})}" th:text="${approval.apdocName}"></a></td>
+			<td> <a th:href="@{/user/insertApprovalView(apdocNo=${approval.apdocNo})}" th:text="${approval.apdocName}"></a></td>
 			<td th:utext="${approval.apdocForm}"></td>
 		</tr>
 	</table>

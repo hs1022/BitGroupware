@@ -1,8 +1,11 @@
 package com.bitgroupware.approval.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,9 +14,11 @@ import com.bitgroupware.approval.beans.ApprovalDocumentDto;
 import com.bitgroupware.approval.beans.ApprovalDto;
 import com.bitgroupware.approval.service.ApprovalDocService;
 import com.bitgroupware.approval.service.ApprovalService;
-import com.bitgroupware.chat.Beans.MemberDto;
+import com.bitgroupware.member.vo.MemberVo;
+import com.bitgroupware.security.config.SecurityUser;
 
 @Controller
+@RequestMapping("/user")
 public class ApprovalController {
 	
 	@Autowired
@@ -30,46 +35,89 @@ public class ApprovalController {
 	
 	// 문서 폼
 	@RequestMapping("/selectApprovalDocList")
-	public String selectApprovalDocList(Model model,ApprovalDocumentDto apdocDto) {
-		System.out.println(apdocDto.toString());
+	public String selectApprovalDocList(Model model) {
 		List<ApprovalDocumentDto> approvalDocList = approvalDocService.selectApprovalDocList();
 		model.addAttribute("approvalDocList",approvalDocList);
-		System.out.println(approvalDocList);
 		return "approval/approvalDocTypeList";
 	}
 	
-	// 기안 폼
 	@RequestMapping("/insertApprovalView")
-	public String insertApprovalView(ApprovalDto apDto,Model model,ApprovalDocumentDto apdocDto) {
-		List<?> signlist=null;
-		if(apDto.getApNo()==null) { // 신규
-			apDto.setApDocstatus("1"); // 신규일때는 상태를 대기로 저장(문서상태:1)
-			
-			ApprovalDocumentDto docType = approvalDocService.selectApprovalDoc(apDto.getApdocNo()); // 관리자 - 결재문서 번호 뽑아옴
-			apDto.setApdocNo(docType.getApdocNo()); //결재문서 번호 저장
-			apDto.setApContent(docType.getApdocForm()); // 결재문서 양식내용 저장
-			String memId="임시이름";
-			apDto.setMemId(memId); //결재문서 사번 저장
-			
-			System.out.println(apDto.toString());
-			System.out.println(apdocDto.toString());
-		}else {
-			apDto = approvalService.selectApproval(apDto); 
-//			signlist= approvalService.selectSign(apDto.getApdocNo());
-		}
-		model.addAttribute("apDto",apDto);
-		model.addAttribute("signlist",signlist);
+	public String insertApprovalView(Model model, int apdocNo) {
+		ApprovalDocumentDto approvalDocument = approvalDocService.selectApprovalDoc(apdocNo);
+		model.addAttribute("approvalDocument",approvalDocument);
 		return "approval/approvalWrite";
 	}
 	
 	// 등록
-	public String insertApproval() {
-		return "redirect:/approval/approvalListTobe";
+	@RequestMapping("/insertApproval")
+	public String insertApproval(ApprovalDto approval, @AuthenticationPrincipal SecurityUser principal) {
+		approval.setApDeleteflag("N");
+		approval.setApDocstatus("1");
+		approval.setMemId(principal.getMember().getMemId());
+		MemberVo member = principal.getMember();
+		String memSignUrl = member.getMemSignUrl();
+		int ranks = member.getRanks().getRanksNo();
+		
+		switch(ranks) {
+		case 1 : approval.setApSignUrl1(memSignUrl);
+				 approval.setApSignName1(member.getMemName());
+			break;
+		case 2 : approval.setApSignUrl2(memSignUrl);
+				 approval.setApSignName2(member.getMemName());
+			break;
+		case 3 : approval.setApSignUrl3(memSignUrl);
+				 approval.setApSignName3(member.getMemName());
+			break;
+		case 4 : approval.setApSignUrl4(memSignUrl);
+				 approval.setApSignName4(member.getMemName());
+			break;
+		case 5 : approval.setApSignUrl5(memSignUrl);
+				 approval.setApSignName5(member.getMemName());
+			break;
+		}
+		approvalService.insertApproval(approval, principal.getMember());
+		System.out.println("aaa"+approval);
+		return "redirect:/user/selectApprovalListToBe";
 	}
 	
+	// 결재 받을 문서 리스트
+	@RequestMapping("/selectApprovalListToBe")
+	public String selectApprovalListToBe(Model model, @AuthenticationPrincipal SecurityUser principal, String status) {
+		String memId = principal.getMember().getMemId();
+		List<ApprovalDto> approvalListToBe;
+		if(status==""||status==null) {
+			approvalListToBe = approvalService.selectApprovalListToBeByTotal(memId);
+		}else {
+			approvalListToBe = approvalService.selectApprovalListToBe(memId, status);
+		}
+		model.addAttribute("approvalListToBe",approvalListToBe);
+		
+		Date date = new Date();
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		String today = format.format(date);
+		model.addAttribute("today",today);
+		
+		return "approval/approvalListToBe";
+	}
+	
+	// 결재 할 문서 리스트
+	@RequestMapping("/selectApprovalListTo")
+	public String selectApprovalListTo(Model model, @AuthenticationPrincipal SecurityUser principal) {
+		String memId = principal.getMember().getMemId();
+		List<ApprovalDto> approvalList = approvalService.selectApprovalListTo(memId);
+		model.addAttribute("approvalList",approvalList);
+		return "approval/approvalListTo";
+	}
+
 	// 읽기
-	public String approvalView() {
-		return null;
+	@RequestMapping("/selectApprovalView")
+	public String selectApprovalView(Model model, String apNo, @AuthenticationPrincipal SecurityUser principal) {
+		ApprovalDto approval = approvalService.selectApproval(apNo);
+		model.addAttribute("approval", approval);
+		String memId = principal.getMember().getMemId();
+		int ranksNo = approvalService.selectRanksNo(memId);
+		model.addAttribute("ranksNo",ranksNo);
+		return "approval/approvalDetail";
 	}
 	
 	// 삭제
@@ -78,19 +126,66 @@ public class ApprovalController {
 	}
 	
 	// 결재
-	public String updateApproval() {
-		return null;
+	@RequestMapping("/updateApproval")
+	public String updateApproval(String apNo, int finalSign, int ranksNo, @AuthenticationPrincipal SecurityUser principal) {
+		ApprovalDto approval = approvalService.selectApproval(apNo);
+		MemberVo member = principal.getMember();
+		if(ranksNo==finalSign) {
+			approval.setApDocstatus("4");
+			approval.setApSignpath(null);
+			String memSignUrl = member.getMemSignUrl();
+			int ranks = member.getRanks().getRanksNo();
+			switch(ranks) {
+			case 1 : approval.setApSignUrl1(memSignUrl);
+					 approval.setApSignName1(member.getMemName());
+				break;
+			case 2 : approval.setApSignUrl2(memSignUrl);
+					 approval.setApSignName2(member.getMemName());
+				break;
+			case 3 : approval.setApSignUrl3(memSignUrl);
+					 approval.setApSignName3(member.getMemName());
+				break;
+			case 4 : approval.setApSignUrl4(memSignUrl);
+					 approval.setApSignName4(member.getMemName());
+				break;
+			case 5 : approval.setApSignUrl5(memSignUrl);
+					 approval.setApSignName5(member.getMemName());
+				break;
+			}
+		}else {
+			approval.setApDocstatus("2");
+			approval.setApSignpath(member.getMemName());
+			String memSignUrl = member.getMemSignUrl();
+			int ranks = member.getRanks().getRanksNo();
+			switch(ranks) {
+			case 1 : approval.setApSignUrl1(memSignUrl);
+					 approval.setApSignName1(member.getMemName());
+				break;
+			case 2 : approval.setApSignUrl2(memSignUrl);
+					 approval.setApSignName2(member.getMemName());
+				break;
+			case 3 : approval.setApSignUrl3(memSignUrl);
+					 approval.setApSignName3(member.getMemName());
+				break;
+			case 4 : approval.setApSignUrl4(memSignUrl);
+					 approval.setApSignName4(member.getMemName());
+				break;
+			case 5 : approval.setApSignUrl5(memSignUrl);
+					 approval.setApSignName5(member.getMemName());
+				break;
+			}
+		}
+		approvalService.updateApproval(approval, member);
+		return "redirect:/user/selectApprovalListToBe";
 	}
 	
-	// 결재 받을 문서 리스트
-		public String selectApprovalListTobe(Model model) {
-			List<?> approvalListTobe = approvalService.selectApprovalListTobe();
-			model.addAttribute("approvalListTobe",approvalListTobe);
-			return "approval/approvalTobeList";
-		}
+	@RequestMapping("/updateApprovalCancel")
+	public String updateApprovalCancel(String apNo, String apComment) {
+		System.out.println(apComment);
+		approvalService.updateApprovalCancel(apNo, apComment);
+		return "redirect:/user/selectApprovalListToBe";
+	}
+	
 		
-		// 결재 할 문서 리스트
-		public String selectApprovalListTo() {
-			return null;
-		}
+
 }

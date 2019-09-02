@@ -17,33 +17,33 @@ import com.bitgroupware.approval.persistence.ApprovalDocumentDao;
 public class ApprovalDocServiceImpl implements ApprovalDocService {
 
 	@Autowired
-    private ApprovalDocumentDao apDao;
-	
+	private ApprovalDocumentDao apDao;
+
 	static final Logger LOGGER = LoggerFactory.getLogger(ApprovalDocServiceImpl.class);
-	
+
 	// 모든 문서양식 불러오기
 	@Override
 	public List<ApprovalDocumentDto> selectApprovalDocList() {
 		return apDao.selectApprovalDocList();
 	}
-	
+
 	// 읽기
-	@Override
-	public ApprovalDocumentDto selectApprovalDoc(String apdocNo) {
-		return apDao.selectApprovalDoc(apdocNo);
-	}
+//	@Override
+//	public ApprovalDocumentDto selectApprovalDoc(String apdocNo) {
+//		return apDao.selectApprovalDoc(apdocNo);
+//	}
 
 	// 등록(insert+update)
 	@Transactional
 	@Override
 	public void insertApprovalDoc(ApprovalDocumentDto dto) {
-		if(dto.getApdocNo() == null || "".equals(dto.getApdocNo())) {
+		if (dto.getApdocNo() == null || "".equals(dto.getApdocNo())) {
 			apDao.insertApprovalDoc(dto);
 			LOGGER.error("insertApprovalDoc");
-		}else if(dto.getApdocNo() != null){
+		} else if (dto.getApdocNo() != null) {
 			apDao.updateApprovalDoc(dto);
 			LOGGER.error("updateApprovalDoc");
-		}else {
+		} else {
 			LOGGER.error("둘 다 해당사항 없음");
 		}
 	}
@@ -56,27 +56,28 @@ public class ApprovalDocServiceImpl implements ApprovalDocService {
 
 	@Override
 	public void insertApprovalDocFile(ApprovalFileDto fileDto) {
-		// TODO Auto-generated method stub
 		apDao.insertApprovalDocFile(fileDto);
 	}
 
 	@Override
 	public void updateApprovalDoc(ApprovalDocumentDto dto) {
-		// TODO Auto-generated method stub
 		apDao.updateApprovalDoc(dto);
-		
+
 	}
 
 	@Override
 	public void updateApprovalDocFile(ApprovalFileDto fileDto) {
-		// TODO Auto-generated method stub
 		apDao.updateApprovalDocFile(fileDto);
 	}
 
 	@Override
 	public void deleteApprovalDocFile(ApprovalFileDto fileDto) {
-		// TODO Auto-generated method stub
 		apDao.deleteApprovalDocFile(fileDto);
-		
+
+	}
+
+	// jaebum
+	public ApprovalDocumentDto selectApprovalDoc(int apdocNo) {
+		return apDao.selectApprovalDoc(apdocNo);
 	}
 }

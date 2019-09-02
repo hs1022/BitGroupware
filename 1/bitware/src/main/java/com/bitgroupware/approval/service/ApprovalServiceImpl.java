@@ -7,82 +7,100 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bitgroupware.approval.beans.ApprovalDocumentDto;
 import com.bitgroupware.approval.beans.ApprovalDto;
-import com.bitgroupware.approval.beans.ApprovalProgressDto;
 import com.bitgroupware.approval.persistence.ApprovalDao;
+import com.bitgroupware.member.vo.MemberVo;
 
 @Service
 public class ApprovalServiceImpl implements ApprovalService {
-	
+
 	@Autowired
 	private ApprovalDao apDao;
-	
+
 	static final Logger LOGGER = LoggerFactory.getLogger(ApprovalServiceImpl.class);
 
 	// 결재 받을 문서 리스트
-	@Override
-	public List<?> selectApprovalListTobe() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ApprovalDto> selectApprovalListToBeByTotal(String memId) {
+		return apDao.selectApprovalListToBeByTotal(memId);
+	}
+
+	public List<ApprovalDto> selectApprovalListToBe(String memId, String status) {
+		return apDao.selectApprovalListToBe(memId, status);
 	}
 
 	// 결재 할 문서 리스트
-	@Override
-	public List<?> selectApprovalListTo() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<ApprovalDto> selectApprovalListTo(String memId) {
+		return apDao.selectApprovalListTo(memId);
 	}
 
 	// 읽기
 	@Override
-	public ApprovalDto selectApproval(ApprovalDto apDto){
-		return apDao.selectApproval(apDto) ;
+	public ApprovalDto selectApproval(String apNo) {
+		return apDao.selectApproval(apNo);
 	}
-	
 
 	// 기안
 	@Override
-	public void insertApproval(ApprovalProgressDto aprDto,ApprovalDocumentDto dto) {
-		
-		if(dto.getApdocNo() == null || "".equals(dto.getApdocNo())) {
-			LOGGER.error("insertApprovalDoc");
-		}else if(dto.getApdocNo() != null){
-			LOGGER.error("updateApprovalDoc");
-		}else {
-			LOGGER.error("둘 다 해당사항 없음");
+	public void insertApproval(ApprovalDto approval, MemberVo member) {
+
+		int ranks = member.getRanks().getRanksNo();
+
+		switch (ranks) {
+		case 1:
+			String teamName = member.getTeam().getTeamName();
+			String teamLeaderId = apDao.selectTeamLeader(teamName);
+			approval.setApSignpath(teamLeaderId);
+			break;
+		case 2:
+			String deptName = member.getDepartment().getDeptName();
+			String headerId = apDao.selectHeader(deptName);
+			approval.setApSignpath(headerId);
+			break;
+		case 3:
+			String directorId = apDao.selectDirector(ranks + 1);
+			approval.setApSignpath(directorId);
+			break;
+		case 4:
+			String bossId = apDao.selectBoss(ranks + 1);
+			approval.setApSignpath(bossId);
+			break;
 		}
-		// TODO Auto-generated method stub
-		
+		apDao.insertApproval(approval);
 	}
 
-	// 삭제
-	@Override
-	public void deleteApproval() {
-		// TODO Auto-generated method stub
-		
-	}
-	
-	// 결재 경로
-	@Override
-	public List<?> selectSign(String string) {
-		return apDao.selectSign();
-	}
-	
-	// 마지막 결재 경로
-	@Override
-	public List<?> selectLineLast() {
-		// TODO Auto-generated method stub
-		return null;
+	public int selectRanksNo(String memId) {
+		return apDao.selectRanksNo(memId);
 	}
 
-	// 결재
-	@Override
-	public void updateApproval() {
-		// TODO Auto-generated method stub
-		
+	public void updateApproval(ApprovalDto approval, MemberVo member) {
+
+		int ranks = member.getRanks().getRanksNo();
+
+		switch (ranks) {
+		case 1:
+			String teamName = member.getTeam().getTeamName();
+			String teamLeaderId = apDao.selectTeamLeader(teamName);
+			approval.setApSignpath(teamLeaderId);
+			break;
+		case 2:
+			String deptName = member.getDepartment().getDeptName();
+			String headerId = apDao.selectHeader(deptName);
+			approval.setApSignpath(headerId);
+			break;
+		case 3:
+			String directorId = apDao.selectDirector(ranks + 1);
+			approval.setApSignpath(directorId);
+			break;
+		case 4:
+			String bossId = apDao.selectBoss(ranks + 1);
+			approval.setApSignpath(bossId);
+			break;
+		}
+		apDao.updateApproval(approval);
 	}
 
-	
+	public void updateApprovalCancel(String apNo, String apComment) {
+		apDao.updateApprovalCancel(apNo, apComment);
+	}
 
 }
