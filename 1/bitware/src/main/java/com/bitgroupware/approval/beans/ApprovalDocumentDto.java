@@ -8,8 +8,8 @@ import lombok.Setter;
 @Setter
 @ToString
 public class ApprovalDocumentDto {
-	private String 	apdocNo;	// 번호
+	private int 	apdocNo;	// 번호
 	private String	apdocName;	// 문서양식명
 	private String	apdocForm;	// 문서양식내용
-	private String 	finalSign;	// 최종 결재자
+	private int 	finalSign;	// 최종 결재자
 }
