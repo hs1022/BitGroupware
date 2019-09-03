@@ -117,17 +117,20 @@ public class ApprovalController {
 		String memId = principal.getMember().getMemId();
 		int ranksNo = approvalService.selectRanksNo(memId);
 		model.addAttribute("ranksNo",ranksNo);
+		System.out.println(approval);
 		return "approval/approvalDetail";
 	}
 	
 	// 삭제
-	public String deleteApproval() {
-		return null;
+	@RequestMapping("/deleteApproval")
+	public String deleteApproval(ApprovalDto approval) {
+		approvalService.deleteApproval(approval);
+		return "redirect:/user/selectApprovalListToBe";
 	}
 	
 	// 결재
-	@RequestMapping("/updateApproval")
-	public String updateApproval(String apNo, int finalSign, int ranksNo, @AuthenticationPrincipal SecurityUser principal) {
+	@RequestMapping("/updateApprovalPath")
+	public String updateApprovalPath(String apNo, int finalSign, int ranksNo, @AuthenticationPrincipal SecurityUser principal) {
 		ApprovalDto approval = approvalService.selectApproval(apNo);
 		MemberVo member = principal.getMember();
 		if(ranksNo==finalSign) {
@@ -175,17 +178,64 @@ public class ApprovalController {
 				break;
 			}
 		}
-		approvalService.updateApproval(approval, member);
+		approvalService.updateApprovalPath(approval, member);
 		return "redirect:/user/selectApprovalListToBe";
 	}
 	
+	// 반려
 	@RequestMapping("/updateApprovalCancel")
-	public String updateApprovalCancel(String apNo, String apComment) {
-		System.out.println(apComment);
-		approvalService.updateApprovalCancel(apNo, apComment);
+	public String updateApprovalCancel(String apNo, String apComment, @AuthenticationPrincipal SecurityUser principal) {
+		ApprovalDto approval = approvalService.selectApproval(apNo);
+		approval.setApDocstatus("3");
+		approval.setApSignpath(null);
+		approval.setApComment(apComment);
+		MemberVo member = principal.getMember();
+		int ranks = member.getRanks().getRanksNo();
+		String memSignUrl = "/images/no.png";
+
+		switch (ranks) {
+		case 1:
+			approval.setApSignUrl1(memSignUrl);
+			approval.setApSignName1(member.getMemName());
+			break;
+		case 2:
+			approval.setApSignUrl2(memSignUrl);
+			approval.setApSignName2(member.getMemName());
+			break;
+		case 3:
+			approval.setApSignUrl3(memSignUrl);
+			approval.setApSignName3(member.getMemName());
+			break;
+		case 4:
+			approval.setApSignUrl4(memSignUrl);
+			approval.setApSignName4(member.getMemName());
+			break;
+		case 5:
+			approval.setApSignUrl5(memSignUrl);
+			approval.setApSignName5(member.getMemName());
+			break;
+		}
+		System.out.println("!!!!"+approval);
+		approvalService.updateApprovalCancel(approval);
 		return "redirect:/user/selectApprovalListToBe";
 	}
 	
-		
+	
+	
+	
+	
+	
+	@RequestMapping("/updateApprovalView")
+	public String updateApprovalView(Model model,String apNo) {
+		ApprovalDto approval = approvalService.selectApproval(apNo);
+		model.addAttribute("approval",approval);
+		return "approval/approvalUpdate";
+	}
+	
+	@RequestMapping("/updateApproval")
+	public String updateApproval(ApprovalDto approval) {
+		approvalService.updateApproval(approval);
+		return "redirect:/user/selectApprovalListToBe";
+	}
 
 }

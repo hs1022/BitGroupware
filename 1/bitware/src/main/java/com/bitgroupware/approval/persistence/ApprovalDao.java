@@ -12,14 +12,14 @@ import com.bitgroupware.approval.beans.ApprovalDto;
 @Mapper
 public interface ApprovalDao {
 	// 결재 받을 문서 리스트
-	@Select("select * from approval where mem_id = #{memId}")
+	@Select("select * from approval where mem_id = #{memId} and ap_deleteflag='N'")
 	List<ApprovalDto> selectApprovalListToBeByTotal(String memId);
 
-	@Select("select * from approval where mem_id = #{memId} and ap_docstatus = #{status}")
+	@Select("select * from approval where mem_id = #{memId} and ap_deleteflag='N' and ap_docstatus = #{status}")
 	List<ApprovalDto> selectApprovalListToBe(String memId, String status);
 
 	// 결재 할 문서 리스트
-	@Select("select * from approval where ap_signpath = #{memId} and ap_docstatus in (1,2)")
+	@Select("select * from approval where ap_signpath = #{memId} and ap_docstatus in (1,2) and ap_deleteflag = 'N'")
 	List<ApprovalDto> selectApprovalListTo(String memId);
 
 	@Select("select * from approval where ap_no = #{apNo} and ap_deleteflag = 'N'")
@@ -45,8 +45,14 @@ public interface ApprovalDao {
 	int selectRanksNo(String memId);
 
 	@Update("update approval set ap_docstatus = #{apDocstatus}, ap_signpath = #{apSignpath}, ap_sign_url1 = #{apSignUrl1}, ap_sign_url2 = #{apSignUrl2}, ap_sign_url3 = #{apSignUrl3}, ap_sign_url4 = #{apSignUrl4}, ap_sign_url5 = #{apSignUrl5}, ap_sign_name1 = #{apSignName1}, ap_sign_name2 = #{apSignName2}, ap_sign_name3 = #{apSignName3}, ap_sign_name4 = #{apSignName4}, ap_sign_name5 = #{apSignName5} where ap_no = #{apNo}")
-	void updateApproval(ApprovalDto approval);
+	void updateApprovalPath(ApprovalDto approval);
 
-	@Update("update approval set ap_docstatus = 3, ap_signpath = null, ap_comment = #{apComment} where ap_no = #{apNo}")
-	void updateApprovalCancel(String apNo, String apComment);
+	@Update("update approval set ap_docstatus = #{apDocstatus}, ap_signpath = #{apSignpath}, ap_comment = #{apComment}, ap_sign_url1 = #{apSignUrl1}, ap_sign_url2 = #{apSignUrl2}, ap_sign_url3 = #{apSignUrl3}, ap_sign_url4 = #{apSignUrl4}, ap_sign_url5 = #{apSignUrl5}, ap_sign_name1 = #{apSignName1}, ap_sign_name2 = #{apSignName2}, ap_sign_name3 = #{apSignName3}, ap_sign_name4 = #{apSignName4}, ap_sign_name5 = #{apSignName5} where ap_no = #{apNo}")
+	void updateApprovalCancel(ApprovalDto approval);
+
+	@Update("update approval set ap_deleteflag ='Y' where ap_no = #{apNo}")
+	void deleteApproval(ApprovalDto approval);
+	
+	@Update("update approval set ap_title = #{apTitle} ,ap_content = #{apContent} where ap_no = #{apNo}")
+	void updateApproval(ApprovalDto approval);
 }

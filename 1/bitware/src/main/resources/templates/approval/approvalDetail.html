@@ -13,7 +13,7 @@ $(function(){
 		var ranksNo = $("#ranksNo").val();
 		var check = confirm("승인하시겠습니까?");
 		if(check){
-			location.href="/user/updateApproval?apNo="+apNo+"&finalSign="+finalSign+"&ranksNo="+ranksNo;
+			location.href="/user/updateApprovalPath?apNo="+apNo+"&finalSign="+finalSign+"&ranksNo="+ranksNo;
 		}
 	});
 	$(".cancelBtn").click(function(){
@@ -26,8 +26,8 @@ $(function(){
 });
 </script>
 </head>
-<body>
-<table border="1">
+<body th:align="center">
+<table border="1" th:align="center">
 <input type="hidden" id="apNo" th:value="${approval.apNo}">
 <input type="hidden" id="finalSign" th:value="${approval.finalSign}">
 <input type="hidden" id="ranksNo" th:value="${ranksNo}">
@@ -138,6 +138,28 @@ $(function(){
 		<td th:text="${approval.apSignName5}"></td>
 	</tr>
 </table>
+
+<div th:align="center">
+		<table border="1" width="1000" height="500">
+		<tr>
+			<td>문서명</td>
+			<td name="apTitle" id="apTitle" th:text="${approval.apTitle}"/>
+		</tr>
+		<tr>
+			<td>문서내용</td>
+			<td><span name="apContent" cols="50" rows="50" id="apContent" th:utext="${approval.apContent}"></span></td>
+		</tr>
+		<th:block th:if="${approval.apComment != null}">
+		<tr>
+		<td>반려사유</td>
+		<td name="apComment" id="apComment" th:text="${approval.apComment}"></td>
+		</tr>
+		</th:block>
+		</table>
+	</div>
+		<a th:href="@{/user/selectApprovalListToBe}">목록</a><br>
+		<a th:if="${approval.apDocstatus=='1'}" th:href="@{/user/deleteApproval(apNo=${approval.apNo})}">삭제</a><br>
+		<a th:if="${approval.apDocstatus=='1'}" th:href="@{/user/updateApprovalView(apNo=${approval.apNo})}">수정</a>
 </body>
 </html>
 

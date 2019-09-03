@@ -22,9 +22,13 @@ public interface ApprovalService {
 	
 	int selectRanksNo(String memId);
 	
-	void updateApproval(ApprovalDto approval, MemberVo member);
+	void updateApprovalPath(ApprovalDto approval, MemberVo member);
 	
-	void updateApprovalCancel(String apNo, String apComment);
+	void updateApprovalCancel(ApprovalDto approval);
+	
+	void deleteApproval(ApprovalDto approval);
+	
+	void updateApproval(ApprovalDto approval);
 	
 	
 

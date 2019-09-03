@@ -72,8 +72,8 @@ public class ApprovalServiceImpl implements ApprovalService {
 		return apDao.selectRanksNo(memId);
 	}
 
-	public void updateApproval(ApprovalDto approval, MemberVo member) {
-
+	public void updateApprovalPath(ApprovalDto approval, MemberVo member) {
+		
 		int ranks = member.getRanks().getRanksNo();
 
 		switch (ranks) {
@@ -96,11 +96,24 @@ public class ApprovalServiceImpl implements ApprovalService {
 			approval.setApSignpath(bossId);
 			break;
 		}
+		apDao.updateApprovalPath(approval);
+	}
+
+	public void updateApprovalCancel(ApprovalDto approval) {
+		apDao.updateApprovalCancel(approval);
+	}
+
+	@Override
+	public void deleteApproval(ApprovalDto approval) {
+		apDao.deleteApproval(approval);
+	}
+	
+	@Override
+	public void updateApproval(ApprovalDto approval) {
 		apDao.updateApproval(approval);
 	}
 
-	public void updateApprovalCancel(String apNo, String apComment) {
-		apDao.updateApprovalCancel(apNo, apComment);
-	}
+	
+
 
 }
